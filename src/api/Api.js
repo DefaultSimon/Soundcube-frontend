@@ -57,7 +57,7 @@ class SoundcubeApi {
             })
     };
 
-    player_play = (url) => {
+    player_play = () => {
         this.send_http_request(
             "POST",
             "/music/player/play",
@@ -65,6 +65,17 @@ class SoundcubeApi {
             function (resp) {
                 log.info("Got /play response")
             })
+    };
+
+    player_pause = () => {
+        this.send_http_request(
+            "POST",
+            "/music/player/pause",
+            null,
+            function (resp) {
+                log.info("Got /pause response")
+            }
+        )
     };
 }
 

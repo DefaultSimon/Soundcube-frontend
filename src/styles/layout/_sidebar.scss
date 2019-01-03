@@ -1,0 +1,55 @@
+.sidebar {
+    float: left;
+
+    border: 2px solid black;
+    background: $alternate-background;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 22vw;
+    min-width: 100px;
+    padding: 10px 0;
+
+    .title {
+        display: flex;
+        justify-self: center;
+
+        padding: 15px;
+        font-weight: 700;
+    }
+
+    .link {
+        display: flex;
+        align-items: center;
+
+        padding: 20px 25px;
+        background: darken($alternate-background, 5%);
+
+        cursor: pointer;
+
+        transition: .1s ease-in-out;
+
+        &:hover {
+            background: darken($alternate-background, 10%);
+        }
+
+        // Other elements
+        &--text {
+            padding-left: 15px;
+            font-size: 1.4rem;
+
+            font-variant: small-caps;
+            letter-spacing: 0.2px;
+        }
+
+        &--icon {
+            display: block;
+            margin: 0 auto;
+
+            width: 2.2rem;
+            height: auto;
+        }
+    }
+
+}

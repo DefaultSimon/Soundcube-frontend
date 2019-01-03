@@ -19,6 +19,7 @@ $desktop: $medium;
 
 /* Colors */
 
+/*
 $background: white; 
 $primary-color: #0366EE;
 $secondary-color: #29de7d; 
@@ -28,6 +29,19 @@ $alternate-color: #404040;
 $link-color: $primary-color;
 $link-hover-color: darken($link-color, 15%);
 $highlight: #ffeea8;
+$error: #D33C40;
+$bq-border: 16px solid #f0f0f0;
+*/
+
+$background: white;
+$primary-color: #2196F3;
+$secondary-color: #1976D2;
+$accent-color: #EF5350;
+$alternate-background: lighten(#B8CED7, 0.5);
+$alternate-color: #404040;
+$link-color: darken($primary-color, 1%);
+$link-hover-color: darken($link-color, 10%);
+$highlight: #CECCCC;
 $error: #D33C40;
 $bq-border: 16px solid #f0f0f0;
 
@@ -40,13 +54,15 @@ $font-style: normal;
 $font-variant: normal;
 $font-weight: normal;
 $font-color: #404040;
-$font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+//$font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+$font-family: Lato, Helvetica Neue, Helvetica, Arial, sans-serif;
 $line-height: 1.6;
 
 // Headings
 $heading-font-color: #404040;
 $heading-font-weight: 600;
-$heading-font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+//$heading-font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
+$heading-font-family: Lato, Helvetica Neue, Helvetica, Arial, sans-serif;
 $heading-line-height: 1.2;
 
 // Mobile heading font size

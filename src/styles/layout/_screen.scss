@@ -1,0 +1,22 @@
+.screens {
+    background: $background;
+
+    .screen {
+        // hidden by default
+        visibility: hidden;
+
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+
+        padding: 30px;
+
+        &.show {
+            display: flex;
+            visibility: visible;
+        }
+    }
+}
+
+// Import specific screens
+@import "screens/player";

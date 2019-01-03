@@ -20,4 +20,8 @@
 @import "components/forms";
 @import "components/tables";
 @import "components/navigation"; 
-@import "components/layout"; 
+@import "components/layout";
+
+@import "layout/body";
+@import "layout/sidebar";
+@import "layout/screen";
