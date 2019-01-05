@@ -1,0 +1,18 @@
+.fullwidth {
+    width: 100%;
+}
+
+.flex {
+    display: flex;
+
+    &.col {
+        flex-direction: column;
+    }
+
+    &--center {
+        justify-content: center;
+    }
+    &--middle {
+        align-items: center;
+    }
+}

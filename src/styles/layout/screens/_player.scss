@@ -1,4 +1,73 @@
 // Player screen
-.screen.player {
+.player {
+    width: 100%;
 
+    &__title {
+        font-size: 1.8rem;
+        font-weight: 700;
+
+        margin: 15px 0;
+    }
+
+    &__track {
+        position: relative;
+        width: 90%;
+        display: flex;
+        justify-content: center;
+
+        cursor: pointer;
+        transform: translateY(0);
+        transition: .2s ease-in-out;
+
+        #track_progress, #track_full {
+            position: absolute;
+            height: 6px;
+            width: 100%;
+        }
+
+        #track_full {
+            background: $track-background;
+        }
+
+        #track_progress {
+            // Progress can be shown by setting width
+            left: 0;
+            width: 50%;
+            background: $track-seek;
+        }
+
+        &:hover {
+            #track_progress, #track_full {
+                height: 10px;
+                transform: translateY(-2px);
+            }
+        }
+    }
+
+    &__control {
+        margin-top: 15px;
+
+        span {
+            margin: 3px;
+        }
+
+        span svg {
+            cursor: pointer;
+            display: inline-block;
+            margin: 0 auto;
+
+            width: 3rem;
+            height: auto;
+
+            &:hover path {
+                fill: lighten($alternate-color, 15%)
+            }
+        }
+
+        // Custom svg colors
+        svg path {
+            fill: $alternate-color;
+            transition: .1s ease-in-out;
+        }
+    }
 }

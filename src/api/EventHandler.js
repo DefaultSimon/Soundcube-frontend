@@ -1,5 +1,5 @@
 // Event handler
-import Logger from './logger';
+import Logger from './Logger';
 
 const log = new Logger("EventHandler");
 
@@ -19,7 +19,7 @@ class EventHandler {
         }
 
         this.subscribers[eventName].push(callback);
-        log.info(`New subscriber for event: ${eventName}`)
+        log.debug(`New subscriber for event: ${eventName}`)
     }
 
     emitEvent(eventName, ...args) {

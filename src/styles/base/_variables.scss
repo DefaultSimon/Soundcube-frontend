@@ -45,6 +45,11 @@ $highlight: #CECCCC;
 $error: #D33C40;
 $bq-border: 16px solid #f0f0f0;
 
+// Player colours
+$track-background: lighten($alternate-color, 35%);
+//$track-seek: darken($accent-color, 15%);
+$track-seek: #D32F2F;
+
 /* Typography */
 
 // Body font

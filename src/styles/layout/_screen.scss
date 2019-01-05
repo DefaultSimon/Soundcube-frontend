@@ -1,5 +1,6 @@
 .screens {
-    background: $background;
+    background: $alternate-background;
+    width: 100%;
 
     .screen {
         // hidden by default
@@ -11,7 +12,7 @@
 
         padding: 30px;
 
-        &.show {
+        &.visible {
             display: flex;
             visibility: visible;
         }

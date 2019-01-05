@@ -23,7 +23,13 @@ class ScreenContainer extends Component {
                 },
                 "Queue": {
                     screen: QueueScreen
+                },
+                // TODO
+                /*
+                "Music": {
+                    screen: null
                 }
+                */
             },
             currentScreen: this.defaultScreen
         }
@@ -45,14 +51,14 @@ class ScreenContainer extends Component {
         const screenContainerThis = this;
 
         return (
-            <div className="container screens">
+            <div className="screens">
                 { // This will render all screens but show only the main one
-                Object.keys(this.state.screens).map((item, index) => {
+                Object.keys(this.state.screens).map((item) => {
                     const ThisComponent = this.state.screens[item].screen;
                     // Pass the isShown prop to the component if needed
-                    let visibleClassName = item === this.state.currentScreen;
+                    let isVisible = item === this.state.currentScreen;
 
-                    return <ThisComponent key={item} screenContainer={screenContainerThis} isShown={visibleClassName} />
+                    return <ThisComponent key={item} screenContainer={screenContainerThis} isShown={isVisible} />
                 })}
             </div>
         );
