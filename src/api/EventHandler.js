@@ -3,11 +3,22 @@ import Logger from './Logger';
 
 const log = new Logger("EventHandler");
 
-class EventHandler {
-    common = {
-        moveToScreen: "moveToScreen"
-    };
+const Events = {
+    // Request that ScreenContainer moves to the provided screen
+    // args: screenName
+    moveToScreen: "moveToScreen",
+    // Request that the queue fetches an update from the server
+    // args: none
+    updateQueue: "updateQueue",
+    // Update Queue's state with already fetched data
+    // args: queue array
+    updateQueueWithData: "updateQueueWithData",
+    // Update current song's info
+    // args: none
+    updateCurrentSong: "updateCurrentSong"
+};
 
+class EventHandler {
     constructor() {
         this.subscribers = {};
     }
@@ -39,3 +50,4 @@ class EventHandler {
 const eventHandler = new EventHandler();
 
 export default eventHandler;
+export { Events };
