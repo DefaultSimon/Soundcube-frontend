@@ -2,6 +2,22 @@
     height: 100vh;
     max-height: 100vh;
 
+    position: relative;
+
     display: flex;
-    background: $alternate-background;
+    flex-grow: 1;
+    background: $background;
+}
+
+main {
+    // Resizes the main container to fit remaining space
+    $appbar: 50px;
+    $drawer: 190px;
+
+    position: absolute;
+    width: calc(100% - #{$drawer});
+    height: calc(100% - #{$appbar});
+
+    top: 50px;
+    left: $drawer
 }

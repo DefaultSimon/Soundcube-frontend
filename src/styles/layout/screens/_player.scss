@@ -1,8 +1,10 @@
 // Player screen
 .player {
-    width: 100%;
+    width: 60%;
+    max-width: 600px;
 
     &__title {
+        font-family: $font-family;
         font-size: 1.8rem;
         font-weight: 700;
 
@@ -11,7 +13,10 @@
 
     &__track {
         position: relative;
-        width: 90%;
+
+        width: 80%;
+        height: 6px;
+
         display: flex;
         justify-content: center;
 
@@ -19,31 +24,37 @@
         transform: translateY(0);
         transition: .2s ease-in-out;
 
+        margin: 12px 0;
+
+
         #track_progress, #track_full {
             position: absolute;
-            height: 6px;
+            height: 8px;
             width: 100%;
         }
 
         #track_full {
-            background: $track-background;
+            background: darken(#fff, 10%);
         }
 
         #track_progress {
             // Progress can be shown by setting width
+            //width: 1%;
+
             left: 0;
-            width: 50%;
-            background: $track-seek;
+            background: $secondary-color;
         }
 
         &:hover {
             #track_progress, #track_full {
-                height: 10px;
+                height: 12px;
                 transform: translateY(-2px);
             }
         }
+
     }
 
+    /*
     &__control {
         margin-top: 15px;
 
@@ -70,4 +81,5 @@
             transition: .1s ease-in-out;
         }
     }
+    */
 }

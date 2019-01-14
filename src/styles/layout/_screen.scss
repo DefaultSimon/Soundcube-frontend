@@ -1,5 +1,5 @@
 .screens {
-    background: $alternate-background;
+    background: $background;
     width: 100%;
 
     .screen {
@@ -9,6 +9,7 @@
         display: none;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
 
         padding: 30px;
 
@@ -21,3 +22,4 @@
 
 // Import specific screens
 @import "screens/player";
+@import "screens/queue";
