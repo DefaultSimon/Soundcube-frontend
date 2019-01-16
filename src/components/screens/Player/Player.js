@@ -91,30 +91,52 @@ class Player extends Component {
             })
     };
 
+    _update_player = (playingStatusOptions) => {
+        eventHandler.emitEvent(Events.updatePlayingStatus, playingStatusOptions);
+        this.updateSongInfo();
+    };
+
     player_previous = () => {
         log.info("Got action: previous");
-        this.api.player_previous();
+
+        this.api.player_previous()
+            .then(() => this._update_player({ forceIsPlaying: true, startAt: 0, refreshIn: 1.5 }))
+            .catch(() => {});
     };
     player_play = () => {
         log.info("Got action: play");
-        this.api.player_resume();
+
+        this.api.player_resume()
+            .then(() => this._update_player({ forceIsPlaying: true, refreshIn: 1 }))
+            .catch(() => {});
     };
     player_pause = () => {
         log.info("Got action: pause");
-        this.api.player_pause();
+
+        this.api.player_pause()
+            .then(() => this._update_player({ forceIsPlaying: false}))
+            .catch(() => {});
     };
     player_stop = () => {
         log.info("Got action: stop");
-        this.api.player_stop();
+
+        this.api.player_stop()
+            .then(() => this._update_player({ forceIsPlaying: false, startAt: 0}))
+            .catch((err) => {
+                if (err.response.status === 440) {
+                    this._update_player({ forceIsPlaying: false, startAt: 0})
+                }
+            });
     };
     player_next = () => {
         log.info("Got action: next");
-        this.api.player_next();
+
+        this.api.player_next()
+            .then(() => this._update_player({ forceIsPlaying: true, startAt: 0, refreshIn: 1.5 }))
+            .catch(() => {});
     };
 
     render() {
-        const { classes } = this.props;
-
         return (
             <div className="player flex col flex--middle">
                 <div className="player__title">
@@ -124,7 +146,7 @@ class Player extends Component {
                     }
                 </div>
                 {/* TODO make this dynamic */}
-                <PlayerTrackProgressBar progress={this.state.currentSongProgress} />
+                <PlayerTrackProgressBar />
                 <div className="player__control">
                     {
                         // Generates controls with proper callbacks
@@ -133,6 +155,7 @@ class Player extends Component {
 
                             return (
                                 <IconButton
+                                    key={name}
                                     color="secondary"
                                     aria-label={name}
                                     onClick={onClick}>

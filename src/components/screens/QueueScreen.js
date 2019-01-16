@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+import soundcubeApi from '../../api/Api';
 import eventHandler, { Events } from '../../api/EventHandler';
 import Queue from './Queue/Queue';
 
@@ -7,6 +8,32 @@ import TextField from '@material-ui/core/TextField';
 import Button from "@material-ui/core/es/Button";
 
 class QueueScreen extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            videoIdInput: "eqY3FaZmh-Y"
+        };
+
+        this.api = soundcubeApi;
+    }
+
+    queueSong = () => {
+        this.api.player_quickQueue(this.state.videoIdInput)
+            .then((response) => {
+                if (response.status === 200) {
+                    eventHandler.emitEvent(Events.updateQueue)
+                }
+            })
+            .catch((err) => {
+                eventHandler.emitEvent(Events.updateQueue)
+            })
+    };
+
+    onInputUpdate = (event) => {
+        this.setState({ videoIdInput: event.target.value })
+    };
+
     render() {
         const { screenContainer, isShown } = this.props;
 
@@ -20,11 +47,12 @@ class QueueScreen extends Component {
                     <TextField
                         id="video_id_input"
                         label="Video ID"
-                        value="eqY3FaZmh-Y"
+                        value={this.state.videoIdInput}
                         margin="normal"
                         variant="filled"
+                        onChange={this.onInputUpdate}
                     />
-                    <Button className="submit" variant="contained">
+                    <Button className="submit" variant="contained" onClick={this.queueSong}>
                         Queue video
                     </Button>
                 </div>

@@ -15,7 +15,10 @@ const Events = {
     updateQueueWithData: "updateQueueWithData",
     // Update current song's info
     // args: none
-    updateCurrentSong: "updateCurrentSong"
+    updateCurrentSong: "updateCurrentSong",
+    // Set playing state
+    // args: boolean, to enforce status
+    updatePlayingStatus: "updatePlayingStatus"
 };
 
 class EventHandler {

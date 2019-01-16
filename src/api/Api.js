@@ -151,18 +151,20 @@ class SoundcubeApi {
             "/music/player/audioTime",
             null);
 
-        log.debug("Got /player/audioTime response");
+        log.debug("Got GET /player/audioTime response");
         return response
     };
 
     player_time_set = async (time_seconds) => {
-        let resposne = await this.send_http_request(
+        let response = await this.send_http_request(
             "PATCH",
             "/music/player/audioTime",
             {
                 "time": parseFloat(time_seconds)
             }
-        )
+        );
+        log.debug("Got PATCH /player/audioTime response");
+        return response;
     };
 
     // Blueprint: Queue

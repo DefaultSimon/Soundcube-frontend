@@ -8,7 +8,7 @@ class Logger {
     }
 
     _parse(message) {
-        return "[" + this.name + "] " + message;
+        return "[" + this.name + "] " + JSON.stringify(message);
     }
 
     info(message) {
