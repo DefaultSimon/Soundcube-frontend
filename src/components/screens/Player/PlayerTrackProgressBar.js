@@ -35,7 +35,6 @@ class PlayerTrackProgressBar extends Component {
 
         // this.setState({isPlaying: true});
         this.interval = setInterval(() => {
-            console.debug("Current time is " + this.state.time);
             this.setState({time: parseFloat(this.state.time) + (delay / 1000)})
         }, delay)
     }
@@ -53,6 +52,10 @@ class PlayerTrackProgressBar extends Component {
             log.debug("Refreshing playing state...");
             this.updateTimeInfo()
         }, refreshInterval)
+    }
+
+    removeRefreshInterval() {
+        clearInterval(this.refreshInterval);
     }
 
     updateTimeInfo() {
@@ -95,7 +98,8 @@ class PlayerTrackProgressBar extends Component {
     }
 
     componentWillUnmount() {
-        this.removeProgressInterval()
+        this.removeProgressInterval();
+        this.removeRefreshInterval();
     }
 
     updatePlayingStatus = (options) => {
@@ -106,8 +110,6 @@ class PlayerTrackProgressBar extends Component {
         if (forceIsPlaying === true || forceIsPlaying === false) {
             const currentTime = this.state.time;
             log.debug("Forcing playing status: " + forceIsPlaying);
-
-            console.log(startAt === null);
 
             if (forceIsPlaying === false) {
                 this.removeProgressInterval()
@@ -126,11 +128,10 @@ class PlayerTrackProgressBar extends Component {
     };
 
     handleMouseClick = (e) => {
-        const { nativeEvent } = e;
-        const x = nativeEvent.offsetX;
-
+        const x = e.nativeEvent.offsetX;
         const totalWidth = this.playerTrack.current.offsetWidth;
 
+        // Calculate percentage offset inside the progress bar
         const amount = (x / totalWidth).toFixed(4);
         const timeSeconds = (amount * this.state.totalTime).toFixed(2);
 
@@ -140,7 +141,11 @@ class PlayerTrackProgressBar extends Component {
             .then((response) => {
                 if (response.status === 200) {
                     log.info("Changed time!");
+
                     this.setState({time: timeSeconds});
+                    setTimeout(() => {
+                        this.updateTimeInfo()
+                    }, 2000)
                 }
             })
             .catch((err) => {
