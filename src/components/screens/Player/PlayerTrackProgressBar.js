@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Logger from '../../../api/Logger';
 import soundcubeApi from '../../../api/Api';
 import eventHandler, { Events } from '../../../api/EventHandler';
+import { resolveTime, timeFormatWithColon } from '../../../api/Utilities';
 
 const log = new Logger("PlayerProgressBar");
 
@@ -17,10 +18,9 @@ class PlayerTrackProgressBar extends Component {
         };
 
         this.api = soundcubeApi;
-        this.refreshInterval = null;
         this.interval = null;
 
-        this.intervalIsRunning = false;
+        this.playerTrack = React.createRef();
 
         eventHandler.subscribeToEvent(Events.updatePlayingStatus, this.updatePlayingStatus)
     }
@@ -125,11 +125,46 @@ class PlayerTrackProgressBar extends Component {
         }
     };
 
+    handleMouseClick = (e) => {
+        const { nativeEvent } = e;
+        const x = nativeEvent.offsetX;
+
+        const totalWidth = this.playerTrack.current.offsetWidth;
+
+        const amount = (x / totalWidth).toFixed(4);
+        const timeSeconds = (amount * this.state.totalTime).toFixed(2);
+
+        log.debug(`Clicked at ${(amount * 100).toFixed(1)}%, changing time to ${timeSeconds}...`);
+
+        this.api.player_time_set(timeSeconds)
+            .then((response) => {
+                if (response.status === 200) {
+                    log.info("Changed time!");
+                    this.setState({time: timeSeconds});
+                }
+            })
+            .catch((err) => {
+                if (err.requestFailed) {
+                    return;
+                }
+
+                if (err.response.status === 441) {
+                    log.warn("Can't change time, internal error / outside time bounds.")
+                }
+            })
+    };
+
     render() {
         return (
-            <div className="player__track">
-                <div id="track_full"/>
-                <div id="track_progress" style={{width: (this.state.time / this.state.totalTime * 100) + "%"}}/>
+            <div className="player__progress">
+                <div ref={this.playerTrack} className="track" onClick={this.handleMouseClick}>
+                    <div id="track_full"/>
+                    <div id="track_progress" style={{width: (this.state.time / this.state.totalTime * 100) + "%"}}/>
+                </div>
+                <div className="time">
+                    <span>{resolveTime(parseInt(this.state.time), timeFormatWithColon)}</span>
+                    <span>{resolveTime(this.state.totalTime, timeFormatWithColon)}</span>
+                </div>
             </div>
         );
     }

@@ -2,7 +2,47 @@
 Various utilities
  */
 
-function resolveTime(seconds) {
+function timeFormatWithText(data) {
+    const { years, days, hours, minutes, seconds } = data;
+    
+    let fields = [];
+    if (years) {
+        fields.push(`${years}y`)
+    }
+    if (days) {
+        fields.push(`${days}d`)
+    }
+    if (hours) {
+        fields.push(`${hours}h`)
+    }
+    if (minutes) {
+        fields.push(`${minutes}m`)
+    }
+    if (seconds) {
+        fields.push(`${seconds}s`)
+    }
+
+    return fields.join(" ")
+}
+
+export { timeFormatWithText };
+
+function timeFormatWithColon(data) {
+    const { years, days, hours, minutes, seconds } = data;
+
+    let fields = [];
+    if (years) { fields.push(years) }
+    if (days) { fields.push(days) }
+    if (hours) { fields.push(hours) }
+    if (minutes) { fields.push(minutes) }
+    if (seconds) { fields.push(seconds) }
+
+    return fields.join(":")
+}
+
+export { timeFormatWithColon };
+
+function resolveTime(seconds, formatter= timeFormatWithText) {
     /*
     Converts seconds into a human-friendly representation
      */
@@ -30,24 +70,8 @@ function resolveTime(seconds) {
         }
     }
 
-    let fields = [];
-    if (years) {
-        fields.push(`${years}y`)
-    }
-    if (days) {
-        fields.push(`${days}d`)
-    }
-    if (hours) {
-        fields.push(`${hours}h`)
-    }
-    if (minutes) {
-        fields.push(`${minutes}m`)
-    }
-    if (seconds) {
-        fields.push(`${seconds}s`)
-    }
-
-    return fields.join(" ")
+    // Allows use of custom formatting
+    return formatter({years: years, days: days, hours: hours, minutes: minutes, seconds: seconds})
 }
 
 export { resolveTime };

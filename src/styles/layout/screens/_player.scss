@@ -11,75 +11,68 @@
         margin: 15px 0;
     }
 
-    &__track {
+    &__progress {
         position: relative;
 
-        width: 80%;
-        height: 6px;
+        width: 90%;
 
         display: flex;
         justify-content: center;
-
-        cursor: pointer;
-        transform: translateY(0);
-        transition: .2s ease-in-out;
+        flex-direction: column;
+        align-items: center;
 
         margin: 12px 0;
 
-
-        #track_progress, #track_full {
-            position: absolute;
-            height: 8px;
-            width: 100%;
-        }
-
-        #track_full {
-            background: darken(#fff, 10%);
-        }
-
-        #track_progress {
-            // Progress can be shown by setting width
-            //width: 1%;
-
-            left: 0;
-            background: $secondary-color;
-        }
-
-        &:hover {
-            #track_progress, #track_full {
-                height: 12px;
-                transform: translateY(-2px);
-            }
-        }
-
-    }
-
-    /*
-    &__control {
-        margin-top: 15px;
-
-        span {
-            margin: 3px;
-        }
-
-        span svg {
+        .track {
             cursor: pointer;
-            display: inline-block;
-            margin: 0 auto;
+            transform: translateY(0);
+            transition: .2s ease-in-out;
 
-            width: 3rem;
-            height: auto;
+            height: 6px;
+            width: 100%;
 
-            &:hover path {
-                fill: lighten($alternate-color, 15%)
+            #track_progress, #track_full {
+                position: absolute;
+                height: 8px;
+                width: 100%;
+                border-radius: 2px;
+
+                transition: .2s ease-in-out;
+            }
+
+            #track_full {
+                background: darken(#fff, 10%);
+            }
+
+            #track_progress {
+                // Progress can be shown by setting width
+                //width: 1%;
+
+                left: 0;
+                background: $secondary-color;
+            }
+
+            &:hover {
+                #track_progress, #track_full {
+                    height: 12px;
+                    transform: translateY(-2px);
+                }
+                #track_full {
+                    background: darken(#fff, 20%);
+                }
             }
         }
 
-        // Custom svg colors
-        svg path {
-            fill: $alternate-color;
-            transition: .1s ease-in-out;
+        .time {
+            margin: 5px 2px;
+            font-family: $font-family;
+            width: 100%;
+
+            display: flex;
+            justify-content: space-between;
+            flex-direction: row;
         }
+
     }
-    */
+
 }

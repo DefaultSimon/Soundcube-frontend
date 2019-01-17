@@ -13,7 +13,9 @@ import PlayerTrackProgressBar from "./PlayerTrackProgressBar";
 const log = new Logger("Player");
 
 const styles = theme => ({
-
+    buttonMargins: {
+        margin: "2px 8px;"
+    }
 });
 
 class Player extends Component {
@@ -107,7 +109,7 @@ class Player extends Component {
         log.info("Got action: play");
 
         this.api.player_resume()
-            .then(() => this._update_player({ forceIsPlaying: true, refreshIn: 1 }))
+            .then(() => this._update_player({ forceIsPlaying: true, refreshIn: 1.5 }))
             .catch(() => {});
     };
     player_pause = () => {
@@ -123,6 +125,10 @@ class Player extends Component {
         this.api.player_stop()
             .then(() => this._update_player({ forceIsPlaying: false, startAt: 0}))
             .catch((err) => {
+                if (err.requestFailed) {
+                    return;
+                }
+
                 if (err.response.status === 440) {
                     this._update_player({ forceIsPlaying: false, startAt: 0})
                 }
@@ -137,6 +143,8 @@ class Player extends Component {
     };
 
     render() {
+        const { classes } = this.props;
+
         return (
             <div className="player flex col flex--middle">
                 <div className="player__title">
@@ -155,6 +163,7 @@ class Player extends Component {
 
                             return (
                                 <IconButton
+                                    className={classes.buttonMargins}
                                     key={name}
                                     color="secondary"
                                     aria-label={name}
