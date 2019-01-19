@@ -40,6 +40,8 @@ createMuiTheme({
         }
     },
     typography: {
+        useNextVariants: true,
+
         fontFamily: variables.fontFamily,
         fontSize: variables.fontSize,
     }

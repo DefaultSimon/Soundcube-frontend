@@ -2,6 +2,10 @@
 Various utilities
  */
 
+function pad(num, size){
+    return ('00000' + num).substr(-size);
+}
+
 function timeFormatWithText(data) {
     const { years, days, hours, minutes, seconds } = data;
     
@@ -34,8 +38,9 @@ function timeFormatWithColon(data) {
     if (years) { fields.push(years) }
     if (days) { fields.push(days) }
     if (hours) { fields.push(hours) }
-    if (minutes) { fields.push(minutes) }
-    if (seconds) { fields.push(seconds) }
+    // Always push at least minutes and seconds, with zero padded values
+    fields.push(pad(minutes, 2));
+    fields.push(pad(seconds, 2));
 
     return fields.join(":")
 }

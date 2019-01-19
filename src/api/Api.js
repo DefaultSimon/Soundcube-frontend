@@ -188,6 +188,26 @@ class SoundcubeApi {
         log.debug("Got /queue/add response");
         return response
     };
+
+    queue_remove = async (songPosition) => {
+        let response = await this.send_http_request(
+            "POST",
+            "/music/queue/remove",
+            { position: songPosition });
+
+        log.debug("Got /queue/remove response");
+        return response
+    };
+
+    queue_move = async (oldIndex, newIndex) => {
+        let response = await this.send_http_request(
+            "POST",
+            "/music/queue/move",
+            { current_index: oldIndex, new_index: newIndex });
+
+        log.debug("Got /queue/move response");
+        return response
+    };
 }
 
 // Allows only one instance

@@ -1,6 +1,6 @@
 // Player screen
 .player {
-    width: 60%;
+    width: 80%;
     max-width: 600px;
 
     &__title {
@@ -8,7 +8,7 @@
         font-size: 1.8rem;
         font-weight: 700;
 
-        margin: 15px 0;
+        margin: 15px 0 30px 0;
     }
 
     &__progress {
@@ -64,7 +64,7 @@
         }
 
         .time {
-            margin: 5px 2px;
+            margin: 8px 2px;
             font-family: $font-family;
             width: 100%;
 

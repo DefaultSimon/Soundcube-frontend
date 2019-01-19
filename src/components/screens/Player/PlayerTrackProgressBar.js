@@ -83,6 +83,10 @@ class PlayerTrackProgressBar extends Component {
 
             })
             .catch((err) => {
+                if (err.requestFailed) {
+                    return;
+                }
+
                 if (err.response.status === 441) {
                     // No song is loaded
                     this.removeProgressInterval();

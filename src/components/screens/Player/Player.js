@@ -103,7 +103,13 @@ class Player extends Component {
 
         this.api.player_previous()
             .then(() => this._update_player({ forceIsPlaying: true, startAt: 0, refreshIn: 1.5 }))
-            .catch(() => {});
+            .catch((err) => {
+                if (err.requestFailed) {
+                    return;
+                }
+
+                console.log(err.response.status)
+            });
     };
     player_play = () => {
         log.info("Got action: play");

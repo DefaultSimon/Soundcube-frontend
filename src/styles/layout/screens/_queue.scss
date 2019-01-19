@@ -1,10 +1,11 @@
-.queue-song {
-    #video_id_input {
-
+.queue {
+    &__add {
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .submit {
-        background: $primary-color;
+    &__button {
+        position: relative
     }
-
 }

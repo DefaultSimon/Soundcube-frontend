@@ -13,6 +13,14 @@
 
         padding: 30px;
 
+        &__card {
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+        }
+
         &.visible {
             display: flex;
             visibility: visible;
