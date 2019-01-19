@@ -118,7 +118,7 @@ class QueueSectionAdd extends Component {
                             horizontal: 'center',
                         }}
                         open={isSnackbarOpen}
-                        autoHideDuration={400000}
+                        autoHideDuration={4000}
                         onClose={this.closeSnackbar}>
                         <SnackbarContent
                             message={<span className={classes.snackbarMessage}>{snackbarMessage}</span>}

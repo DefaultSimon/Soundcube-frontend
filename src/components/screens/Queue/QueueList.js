@@ -111,7 +111,10 @@ class QueueList extends Component {
         this.api.queue_move(oldIndex, newIndex)
             .then((response) => {
                 if (response.status === 200) {
-                    log.debug(`New queue state: ${JSON.stringify(response.data.new_queue)}`)
+                    log.debug(`New queue state: ${JSON.stringify(response.data.new_queue)}`);
+
+                    // Update queue with new data that was received
+                    this.setQueue(response.data.new_queue)
                 }
             })
             .finally(() => {
