@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import Player from './Player/Player';
 
 // Material-UI
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/es/Card/Card";
+import Typography from "@material-ui/core/Typography";
+import Card from "@material-ui/core/Card";
+import Divider from "@material-ui/core/Divider";
 
 const styles = theme => ({
     playerTitle: {
@@ -14,6 +15,13 @@ const styles = theme => ({
     cardWidth: {
         width: "95%",
         padding: "15px 2px 30px 2px"
+    },
+    divider: {
+        height: "2px",
+        width: "80%"
+    },
+    playerComponent: {
+        marginTop: "45px"
     }
 });
 
@@ -28,7 +36,8 @@ class PlayerScreen extends Component {
                         <Typography component="h3" variant="h3" className={classes.playerTitle}>
                             Player
                         </Typography>
-                        <Player/>
+                        <Divider className={classes.divider} />
+                        <Player className={classes.playerComponent} />
                     </div>
                 </Card>
             </div>

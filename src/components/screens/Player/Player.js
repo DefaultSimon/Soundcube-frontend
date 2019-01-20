@@ -149,10 +149,10 @@ class Player extends Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { classes, className } = this.props;
 
         return (
-            <div className="player flex col flex--middle">
+            <div className={`player flex col flex--middle ${className}`}>
                 <div className="player__title">
                     {this.state.currentSong !== null ?
                         this.state.currentSong.title

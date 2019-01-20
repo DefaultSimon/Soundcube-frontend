@@ -118,6 +118,9 @@ class PlayerTrackProgressBar extends Component {
             if (forceIsPlaying === false) {
                 this.removeProgressInterval()
             }
+            else {
+                this.setProgressInterval();
+            }
 
             this.setState({isPlaying: forceIsPlaying, time: startAt === null ? currentTime : startAt});
 

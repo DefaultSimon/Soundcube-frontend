@@ -3,6 +3,7 @@ import '../styles/main.scss';
 
 // api-related
 import soundcubeApi from '../api/Api';
+import eventHandler, { Events } from '../api/EventHandler';
 import globalStore from '../api/GlobalStore';
 import Logger from '../api/Logger';
 
@@ -24,6 +25,7 @@ import Drawer from "@material-ui/core/es/Drawer/Drawer";
 
 // Utilities
 const log = new Logger("App");
+const logAuth = new Logger("Auth");
 
 // Material-UI palette and other stuff
 // Created from variables inside _variables.scss inside /styles/base/
@@ -74,8 +76,41 @@ class App extends Component {
         super(props);
 
         // TODO make this dynamic
-        globalStore.putInStore("server", {ip: "localhost", port: 5000})
+        globalStore.putInStore("server", {ip: "localhost", port: 5000});
+
+        // Fetch youtube api key from server
+        this.fetchYoutubeApiKey();
     }
+
+    fetchYoutubeApiKey = (nRetries= 5) => {
+        logAuth.debug(`Fetching youtube API key, ${nRetries} retries left...`);
+
+        soundcubeApi.auth_getYoutubeApiKey()
+            .then((response) => {
+                if (response.status === 200) {
+                    if (!response.data.hasOwnProperty("api_key")) {
+                        logAuth.error("Fetched youtube API key, got 200 OK, but no key!");
+                        return;
+                    }
+
+                    logAuth.debug("Got YouTube API key from server!");
+                    globalStore.putInStore("youtubeApiKey", response.data.api_key);
+                    eventHandler.emitEvent(Events.youtubeApiKeyFetched, response.data.api_key);
+                }
+            })
+            .catch((err) => {
+                if (err.requestFailed) {
+                    logAuth.warn(`Request failed, couldn't get API key, retrying in 6 seconds, ${nRetries} retries left.`);
+
+                    if (nRetries > 0) {
+                        setTimeout(() => this.fetchYoutubeApiKey(nRetries - 1), 6000)
+                    }
+                    else {
+                        logAuth.error("No API key received, YouTube search is disabled.")
+                    }
+                }
+            });
+    };
 
     componentDidMount() {
         // Make sure the server is online

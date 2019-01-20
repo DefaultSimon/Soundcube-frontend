@@ -18,7 +18,13 @@ const Events = {
     updateCurrentSong: "updateCurrentSong",
     // Set playing state
     // args: boolean, to enforce status
-    updatePlayingStatus: "updatePlayingStatus"
+    updatePlayingStatus: "updatePlayingStatus",
+    // Emitted when the YouTube API key is fetched
+    // args: string
+    youtubeApiKeyFetched: "youtubeApiKeyFetched",
+    // Emitted when the queueing text field is updated
+    // args: string
+    searchTextUpdated: "searchTextUpdated"
 };
 
 class EventHandler {
@@ -43,6 +49,11 @@ class EventHandler {
         }
 
         // Call all callbacks with the provided arguments
+        if (!this.subscribers.hasOwnProperty(eventName)) {
+            log.debug(`Was about to emit ${eventName}, but no subscribers.`);
+            return;
+        }
+
         let callbacks = this.subscribers[eventName];
         callbacks.forEach((cb) => {
             cb(...args)

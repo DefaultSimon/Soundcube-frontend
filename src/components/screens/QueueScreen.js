@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import QueueList from './Queue/QueueList';
-import QueueSectionAdd from "./Queue/QueueSectionAdd";
+import QueueSectionAdd from "./Queue/QueueAdd";
 
 class QueueScreen extends Component {
     render() {

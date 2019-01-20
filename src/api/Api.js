@@ -53,6 +53,18 @@ class SoundcubeApi {
 
     // ACTUAL (non-internal) API functions
 
+    // Blueprint: Auth
+
+    auth_getYoutubeApiKey = async () => {
+        let response = await this.send_http_request(
+            "GET",
+            "/auth/youtubeApiKey",
+            null);
+
+        log.debug("Got /auth/youtubeApiKey response");
+        return response
+    };
+
     // Blueprint: Ping
     ping = async () => {
         let response = await this.send_http_request(

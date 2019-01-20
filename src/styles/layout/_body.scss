@@ -18,6 +18,11 @@ main {
     width: calc(100% - #{$drawer});
     height: calc(100% - #{$appbar});
 
+    max-width: calc(100% - #{$drawer});
+    max-height: calc(100% - #{$appbar});
+
+    overflow: hidden;
+
     top: 50px;
     left: $drawer
 }

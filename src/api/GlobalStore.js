@@ -13,6 +13,13 @@ class GlobalStore {
         log.debug(`New object in store under key: ${key}`)
     }
 
+    deleteFromStore(key) {
+        if (this.store.hasOwnProperty(key)) {
+            delete this.store[key];
+            log.debug(`Removed object from store: ${key}`)
+        }
+    }
+
     getFromStore(key) {
         if (this.store.hasOwnProperty(key)) {
             return this.store[key]
