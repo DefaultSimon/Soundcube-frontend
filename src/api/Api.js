@@ -5,8 +5,7 @@ import Logger from './Logger';
 const log = new Logger("Api");
 
 class SoundcubeApi {
-    // TODO make this dynamic
-    BASE_URL = "http://localhost:5000";
+    BASE_URL = `http://${window.CONFIG.host}:${window.CONFIG.port}/api/v1`;
 
     constructor() {
 
