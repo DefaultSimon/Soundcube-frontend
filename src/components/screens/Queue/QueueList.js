@@ -5,7 +5,7 @@ import eventHandler, { Events } from '../../../api/EventHandler';
 import soundcubeApi from '../../../api/Api';
 import { resolveTime } from "../../../api/Utilities";
 
-import { Drag } from "mdi-material-ui";
+import { Drag, CloseCircle } from "mdi-material-ui";
 
 import { SortableContainer, SortableElement, arrayMove, SortableHandle } from 'react-sortable-hoc';
 
@@ -26,7 +26,14 @@ const styles = theme => ({
     cellStyle: {
         padding: "4px 15px 4px 20px"
     },
+    iconCellStyle: {
+        padding: "5px"
+    },
+
     dragHandle: {
+        cursor: "pointer"
+    },
+    removeButton: {
         cursor: "pointer"
     }
 });
@@ -37,34 +44,49 @@ const QueueDragHandle = withStyles(styles)(SortableHandle(({ classes }) => (
 )));
 
 // An individual table element - a song
-const QueueItem = withStyles(styles)(SortableElement(({classes, value: {video_id, title, length, unique_id}}) => (
+const QueueItem = withStyles(styles)(SortableElement(({classes, indexNum, value: {video_id, title, length, unique_id}, removeItemCallback}) => (
     <TableRow key={unique_id}>
         <TableCell classes={{root: classes.cellStyle}}>{title}</TableCell>
-        <TableCell classes={{root: [classes.cellStyle, classes.noBreak].join(" ")}}>{resolveTime(length)}</TableCell>
+        <TableCell classes={{root: [classes.cellStyle, classes.noBreak].join(" ")}}>
+            {resolveTime(length)}
+        </TableCell>
         <TableCell classes={{root: classes.cellStyle}}>{video_id}</TableCell>
-        <TableCell classes={{root: classes.cellStyle}}><QueueDragHandle/></TableCell>
+        <TableCell classes={{root: classes.iconCellStyle}}>
+            <QueueDragHandle />
+        </TableCell>
+        <TableCell classes={{root: classes.iconCellStyle}}>
+            <CloseCircle
+                className={classes.removeButton}
+                onClick={() => removeItemCallback(indexNum)} />
+            </TableCell>
     </TableRow>
 )));
 
 // A container for rendering the skeleton of the queue, which is a table
-const QueueItemContainer = SortableContainer(({ items }) => {
+const QueueItemContainer = withStyles(styles)(SortableContainer(({ classes, items, removeItemCallback }) => {
         return (
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell>Title</TableCell>
-                        <TableCell>Length</TableCell>
-                        <TableCell>Video ID</TableCell>
-                        <TableCell>Reorder</TableCell>
+                        <TableCell classes={{root: classes.cellStyle}}>Title</TableCell>
+                        <TableCell classes={{root: classes.cellStyle}}>Length</TableCell>
+                        <TableCell classes={{root: classes.cellStyle}}>Video ID</TableCell>
+                        <TableCell classes={{root: classes.iconCellStyle}}/>
+                        <TableCell classes={{root: classes.iconCellStyle}}/>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {items.map((value, index) => {
-                        return <QueueItem key={"queue-" + value.unique_id} index={index} value={value}/>
+                        return <QueueItem
+                            key={"queue-" + value.unique_id}
+                            index={index}
+                            indexNum={index}
+                            value={value}
+                            removeItemCallback={removeItemCallback}/>
                     })}
                 </TableBody>
             </Table>);
-});
+}));
 
 class QueueList extends Component {
     constructor(props) {
@@ -99,6 +121,27 @@ class QueueList extends Component {
             })
     };
 
+    removeItemFromQueue = (position) => {
+        console.log(position);
+
+        this.api.queue_remove(position)
+            .then((response) => {
+                if (response.status === 200) {
+                    // Removed, update queue
+                    this.setQueue(response.data.new_queue)
+                }
+                else if (response.status === 441) {
+                    // No such song
+                    log.warn("Encountered invalid queue index while removing?!")
+                }
+            })
+            .catch(err => {
+                if (err.requestFailed) {
+                    return;
+                }
+            });
+    };
+
     componentDidMount() {
         this.refreshQueue();
     }
@@ -131,7 +174,8 @@ class QueueList extends Component {
                     onSortEnd={this.onSortEnd}
                     items={this.state.queue}
                     transitionDuration={250}
-                    distance={10} />
+                    distance={10}
+                    removeItemCallback={this.removeItemFromQueue}/>
             </div>
         );
     }
