@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import eventHandler, { Events } from '../../api/EventHandler';
+import eventHandler, { Events } from '../../core/EventHandler';
 
 // Material UI
 import { withStyles } from "@material-ui/core/styles";
@@ -23,6 +23,10 @@ const styles = theme => ({
 
     listItemText: {
         fontSize: theme.typography.h6.fontSize
+    },
+
+    listItemActive: {
+        backgroundColor: theme.palette.secondary.light
     }
 });
 
@@ -53,11 +57,13 @@ class Sidebar extends Component {
                     screen: "Settings",
                     icon: Tune
                 },
-            ]
+            ],
+            activeScreen: "Player"
         }
     }
 
     loadClickedScreen = (screen) => {
+        this.setState({ activeScreen: screen });
         eventHandler.emitEvent(Events.moveToScreen, screen)
     };
 
@@ -65,12 +71,14 @@ class Sidebar extends Component {
         const { classes } = this.props;
 
         return (
-            <List component="nav">
+            <List component="nav" className="sidebar">
             {this.state.items.map(({ text, screen, icon }) => {
                 const Icon = icon;
+                // Make the sidebar icon display if it is active
+                const selectedClass = screen === this.state.activeScreen ? "link active" : "link";
 
                 return (
-                    <ListItem key={text} button onClick={() => this.loadClickedScreen(screen)}>
+                    <ListItem key={text} className={selectedClass} button onClick={() => this.loadClickedScreen(screen)}>
                         <ListItemIcon classes={{ root: classes.listItemIconMargin }}>
                             <Icon/>
                         </ListItemIcon>

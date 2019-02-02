@@ -1,36 +1,18 @@
 /*! Primitive
  * A front end Sass boilerplate
  *
- * Author: Tania Rascia 
+ * Author: Tania Rascia
  */
 
 // Configuration
 @import "base/variables";
 @import "base/mixins";
 
-// Reset
-// TODO delete
-//@import "base/normalize";
-//@import "base/reset";
-
-// Components
-
-/*
-// TODO delete
-@import "components/scaffolding";
-@import "components/grid";
-@import "components/helpers";
-@import "components/buttons";
-//@import "components/forms";
-@import "components/tables";
-@import "components/navigation"; 
-@import "components/layout";
-*/
 @import "components/_utilities.scss";
-
+@import "components/_spinkit2.scss";
 
 @import "layout/body";
 @import "layout/sidebar";
 @import "layout/screen";
 
-@import "layout/common";
+@import "layout/other";

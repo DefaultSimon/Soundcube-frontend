@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 
-import soundcubeApi from "../../../api/Api";
-import eventHandler, {Events} from "../../../api/EventHandler";
+import soundcubeApi from "../../../core/Api";
+import eventHandler, {Events} from "../../../core/EventHandler";
 
 import { ShapePolygonPlus, LibraryPlus } from "mdi-material-ui";
 

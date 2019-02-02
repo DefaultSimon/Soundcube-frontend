@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Logger from "../../../api/Logger";
-import eventHandler, { Events } from '../../../api/EventHandler';
-import soundcubeApi from '../../../api/Api';
-import { resolveTime } from "../../../api/Utilities";
+import Logger from "../../../core/Logger";
+import eventHandler, { Events } from '../../../core/EventHandler';
+import soundcubeApi from '../../../core/Api';
+import { resolveTime } from "../../../core/Utilities";
 
 import { Drag, CloseCircle } from "mdi-material-ui";
 
@@ -98,15 +98,17 @@ class QueueList extends Component {
 
         this.api = soundcubeApi;
 
-        eventHandler.subscribeToEvent(Events.updateQueue, this.refreshQueue);
-        eventHandler.subscribeToEvent(Events.updateQueueWithData, this.setQueue);
+        eventHandler.subscribeToEvent(Events.updateQueue, this.refreshQueue, "queue_list_refresh");
+        eventHandler.subscribeToEvent(Events.updateQueueWithData, this.setQueue, "queue_list_set");
     }
 
     setQueue = (queue) => {
         log.info("Queue updated");
         this.setState({
             queue: queue
-        })
+        });
+
+        eventHandler.emitEvent(Events.queueUpdated)
     };
 
     refreshQueue = () => {
@@ -118,6 +120,9 @@ class QueueList extends Component {
                 else {
                     log.warn(`Tried to get queue, got status code: ${response.status}`)
                 }
+            })
+            .finally(() => {
+                eventHandler.emitEvent(Events.queueUpdated)
             })
     };
 

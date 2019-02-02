@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
-import Logger from '../../../api/Logger';
-import soundcubeApi from '../../../api/Api';
-import eventHandler, { Events } from '../../../api/EventHandler';
-import { resolveTime, timeFormatWithColon } from '../../../api/Utilities';
+import Logger from '../../../core/Logger';
+import soundcubeApi from '../../../core/Api';
+import eventHandler, { Events } from '../../../core/EventHandler';
+import { resolveTime, timeFormatWithColon } from '../../../core/Utilities';
 
 const log = new Logger("PlayerProgressBar");
 
@@ -22,7 +22,7 @@ class PlayerTrackProgressBar extends Component {
 
         this.playerTrack = React.createRef();
 
-        eventHandler.subscribeToEvent(Events.updatePlayingStatus, this.updatePlayingStatus)
+        eventHandler.subscribeToEvent(Events.updatePlayingStatus, this.updatePlayingStatus, "player_track_update")
     }
 
     setProgressInterval() {
@@ -93,6 +93,9 @@ class PlayerTrackProgressBar extends Component {
                     // Sample values to set progress bar to zero
                     this.setState({isPlaying: false, time: 0, totalTime: 100});
                 }
+            })
+            .finally(() => {
+                eventHandler.emitEvent(Events.playingStatusUpdated)
             });
     }
 

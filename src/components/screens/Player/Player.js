@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Logger from '../../../api/Logger';
-import soundcubeApi from '../../../api/Api';
-import eventHandler, { Events } from '../../../api/EventHandler';
+import Logger from '../../../core/Logger';
+import soundcubeApi from '../../../core/Api';
+import eventHandler, { Events } from '../../../core/EventHandler';
 
 // Material-UI
 import { SkipPrevious, Play, Pause, Stop, SkipNext } from "mdi-material-ui";
@@ -59,10 +59,9 @@ class Player extends Component {
         };
 
         // Subscribe to events
-        eventHandler.subscribeToEvent(Events.updateCurrentSong, this.updateSongInfo);
-    }
+        eventHandler.subscribeToEvent(Events.updateCurrentSong, this.updateSongInfo, "player_updateinfo");
 
-    componentWillMount() {
+        // Update the current song when loading
         this.updateSongInfo();
     }
 
@@ -90,6 +89,9 @@ class Player extends Component {
                 else {
                     log.warn(`Requested current song, got status code ${error.status}`)
                 }
+            })
+            .finally(() => {
+                eventHandler.emitEvent(Events.songInfoUpdated)
             })
     };
 

@@ -5,14 +5,14 @@ import PlayerScreen from './screens/PlayerScreen';
 import QueueScreen from "./screens/QueueScreen";
 
 // Other imports
-import eventHandler, { Events } from '../api/EventHandler';
+import eventHandler, { Events } from '../core/EventHandler';
 
 class ScreenContainer extends Component {
     constructor(props) {
         super(props);
 
         // Register to events
-        eventHandler.subscribeToEvent(Events.moveToScreen, this.moveToScreen);
+        eventHandler.subscribeToEvent(Events.moveToScreen, this.moveToScreen, "sc_move");
 
         this.defaultScreen = "Player";
 

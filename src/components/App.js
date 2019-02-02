@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import '../styles/main.scss';
 
 // api-related
-import soundcubeApi from '../api/Api';
-import eventHandler, { Events } from '../api/EventHandler';
-import globalStore from '../api/GlobalStore';
-import Logger from '../api/Logger';
+import soundcubeApi from '../core/Api';
+import eventHandler, { Events } from '../core/EventHandler';
+import globalStore from '../core/GlobalStore';
+import Logger from '../core/Logger';
+import { makePromiseRetryable } from "../core/Utilities";
 
 // Children
-import Sidebar from './sidebar/Sidebar';
 import ScreenContainer from './ScreenContainer';
 
 // Material-UI
@@ -21,7 +21,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
 import Typography from "@material-ui/core/es/Typography/Typography";
-import Drawer from "@material-ui/core/es/Drawer/Drawer";
+import DrawerContainer from "./sidebar/DrawerContainer";
 
 // Utilities
 const log = new Logger("App");
@@ -60,69 +60,133 @@ const styles = theme => ({
 
     appBar: {
         zIndex: theme.zIndex.drawer + 1
-    },
-    drawer: {
-        width: 190,
-        flexShrink: 0
-    },
-    drawerPaper: {
-        width: 190,
-        top: 50
     }
 });
+
+const loadingBar = document.getElementById("loading-bar"),
+      rootElement = document.getElementById("root"),
+      loadingText2 = document.getElementById("loading-text2");
+
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        // TODO make this dynamic
-        globalStore.putInStore("server", {ip: "localhost", port: 5000});
-
-        // Fetch youtube api key from server
-        this.fetchYoutubeApiKey();
+        // Loads common stuff and changes the loading screen
+        this.loadApp();
     }
 
-    fetchYoutubeApiKey = (nRetries= 5) => {
-        logAuth.debug(`Fetching youtube API key, ${nRetries} retries left...`);
+    fetchYoutubeApiKey = () => {
+        /*
+        Important: return the Promise, not a completed job!
+        */
+        logAuth.debug(`Fetching the YouTube API key from backend...`);
 
-        soundcubeApi.auth_getYoutubeApiKey()
+        return soundcubeApi.auth_getYoutubeApiKey()
             .then((response) => {
                 if (response.status === 200) {
                     if (!response.data.hasOwnProperty("api_key")) {
                         logAuth.error("Fetched youtube API key, got 200 OK, but no key!");
-                        return;
+                        throw response;
                     }
 
                     logAuth.debug("Got YouTube API key from server!");
-                    globalStore.putInStore("youtubeApiKey", response.data.api_key);
-                    eventHandler.emitEvent(Events.youtubeApiKeyFetched, response.data.api_key);
+                    globalStore.putInStore("youtubeApiKey", response.data["api_key"]);
+                    eventHandler.emitEvent(Events.youtubeApiKeyFetched, response.data["api_key"]);
                 }
             })
-            .catch((err) => {
-                if (err.requestFailed) {
-                    logAuth.warn(`Request failed, couldn't get API key, retrying in 6 seconds, ${nRetries} retries left.`);
-
-                    if (nRetries > 0) {
-                        setTimeout(() => this.fetchYoutubeApiKey(nRetries - 1), 6000)
-                    }
-                    else {
-                        logAuth.error("No API key received, YouTube search is disabled.")
-                    }
-                }
-            });
     };
 
-    componentDidMount() {
-        // Make sure the server is online
-        soundcubeApi.ping()
-            .then(function (response) {
+    checkServerAvailability = () => {
+        /*
+        Important: return the Promise, not a completed job!
+        */
+        log.debug("Checking server availability...");
+
+        return soundcubeApi.ping()
+            .then((response) => {
                 if (response.status !== 200) {
-                    log.error("Server is not reachable!")
+                    log.error("Server is not reachable!");
+                    throw response;
                 }
                 else {
-                    log.info("Server reachable.")
+                    log.info("Server reachable.");
                 }
             })
+    };
+
+    loadApp() {
+        // Make sure the server is online, then load necessary resources
+        const maxRetries = 4,
+              retryDelay = 2000;
+
+        // Set up handlers for some events
+        let pQueue = eventHandler.waitForEventPromise(Events.queueUpdated);
+        let pPlayingStatus = eventHandler.waitForEventPromise(Events.playingStatusUpdated);
+        let pSongInfo = eventHandler.waitForEventPromise(Events.songInfoUpdated);
+
+        new Promise(async (resolve, reject) => {
+            // 1: Check server availability
+
+            loadingText2.innerHTML = "Checking server availability...";
+
+            // Make the promise retry n times with some error handlers and await it
+            await makePromiseRetryable(
+                this.checkServerAvailability(), maxRetries, retryDelay,
+                (r) => {
+                    // This increments the fail counter
+                    if (!r.hasOwnProperty("failCount")) { r.failCount = 0 }
+                    r.failCount += 1;
+
+                    loadingText2.innerHTML = `Checking server availability... <br>Failed, retrying (${r.failCount}/${maxRetries})`;
+                    return r;
+                })
+                .then(() => {
+                    loadingText2.innerHTML = "Available!"
+                }).catch(() => {
+                    loadingText2.innerHTML = "Server is not available.";
+                    reject();
+                });
+
+            resolve();
+        }).then(async () => {
+            // 2: Fetch YouTube api key from backend
+
+            loadingText2.innerHTML = "Fetching resources...";
+
+            await makePromiseRetryable(
+                this.fetchYoutubeApiKey(), maxRetries, retryDelay,
+                (r) => {
+                    if (!r.hasOwnProperty("failCount")) { r.failCount = 0 }
+                    r.failCount += 1;
+
+                    loadingText2.innerHTML = `Fetching resources... <br>Failed, retrying (${r.failCount}/${maxRetries})`;
+                    return r;
+                })
+                .then(() => {
+                    loadingText2.innerHTML = "Fetched..."
+                })
+                .catch((err) => {
+                    loadingText2.innerHTML = "Something went wrong, try reloading the page a while later.";
+                    throw err;
+                });
+        }).then(async () => {
+            // 3: wait for queue and player load
+
+            loadingText2.innerHTML = "Waiting for queue to update...";
+            await pQueue;
+
+            loadingText2.innerHTML = "Waiting for player to update... (1/2)";
+            await pPlayingStatus;
+
+            loadingText2.innerHTML = "Waiting for player to update... (2/2)";
+            await pSongInfo;
+
+        }).then(() => {
+            // Fade-out the loading bar and fade-in the mounted content
+            loadingBar.classList.add("loaded");
+            rootElement.classList.add("visible");
+        })
     }
 
     render() {
@@ -135,7 +199,7 @@ class App extends Component {
 
                 {/* Top bar */}
                 <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar variant="dense" className="toolbar">
+                    <Toolbar variant="dense" className="toolbar" onClick={() => eventHandler.emitEvent(Events.toggleDrawerState)}>
                         <IconButton className={classes.iconButton}>
                             <MenuIcon className={classes.menuIcon} />
                         </IconButton>
@@ -146,14 +210,7 @@ class App extends Component {
                 </AppBar>
 
                 {/* Left drawer */}
-                <Drawer
-                    className={classes.drawer}
-                    variant="permanent"
-                    classes={{
-                        paper: classes.drawerPaper
-                    }}>
-                    <Sidebar/>
-                </Drawer>
+                <DrawerContainer />
 
                 {/* Screens */}
                 <main>

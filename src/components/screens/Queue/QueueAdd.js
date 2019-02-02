@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import soundcubeApi from '../../../api/Api';
-import eventHandler, {Events} from "../../../api/EventHandler";
+import soundcubeApi from '../../../core/Api';
+import eventHandler, {Events} from "../../../core/EventHandler";
 
 import { withStyles } from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';

@@ -1,0 +1,69 @@
+#loading-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    height: 100vh;
+    width: 100vw;
+
+    top: 0;
+    position: absolute;
+
+    &.loaded {
+        opacity: 0;
+        display: none;
+    }
+
+    .bar {
+        opacity: 1;
+        transition: .5s ease-in-out;
+
+        z-index: 9000;
+    }
+
+    .text {
+        margin: 10px auto;
+
+        div {
+            padding: 8px;
+
+            font-family: $font-family;
+            letter-spacing: .3px;
+
+            text-align: center;
+
+            &:first-of-type {
+                font-size: 1.8rem;
+                font-variant: all-small-caps;
+            }
+            &:not(:first-of-type) {
+                font-size: 0.95rem;
+                padding-top: 0;
+            }
+        }
+    }
+}
+
+#root {
+    visibility: hidden;
+    opacity: 0;
+
+    &.visible {
+        visibility: visible;
+
+        animation-name: fadeinRoot;
+        animation-duration: .4s;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes fadeinRoot {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

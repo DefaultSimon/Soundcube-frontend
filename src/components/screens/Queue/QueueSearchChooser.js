@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Logger from '../../../api/Logger';
-import eventHandler, {Events} from "../../../api/EventHandler";
+import Logger from '../../../core/Logger';
+import eventHandler, {Events} from "../../../core/EventHandler";
 
 import youtubeSearch from 'youtube-search';
 
@@ -56,8 +56,8 @@ class QueueSearchChooser extends Component {
             }
 
             this.youtubeOpts["key"] = key;
-        });
-        eventHandler.subscribeToEvent(Events.searchTextUpdated, this.handleSearchChange);
+        }, "queue_search_gotkey");
+        eventHandler.subscribeToEvent(Events.searchTextUpdated, this.handleSearchChange, "queue_search_handlechange");
     }
 
     handleSearchChange = (value) => {

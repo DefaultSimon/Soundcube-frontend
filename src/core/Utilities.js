@@ -28,7 +28,6 @@ function timeFormatWithText(data) {
 
     return fields.join(" ")
 }
-
 export { timeFormatWithText };
 
 function timeFormatWithColon(data) {
@@ -44,7 +43,6 @@ function timeFormatWithColon(data) {
 
     return fields.join(":")
 }
-
 export { timeFormatWithColon };
 
 function resolveTime(seconds, formatter= timeFormatWithText) {
@@ -78,5 +76,31 @@ function resolveTime(seconds, formatter= timeFormatWithText) {
     // Allows use of custom formatting
     return formatter({years: years, days: days, hours: hours, minutes: minutes, seconds: seconds})
 }
-
 export { resolveTime };
+
+function makePromiseRetryable(promise, maxRetries, retryDelay, afterFail) {
+    /*
+    Wraps a promise in retry handlers, returns the wrapped promise
+     */
+    for(let i=0; i<maxRetries; i++) {
+        //sa = sa.catch(attempt).catch(rejectDelay);
+        promise = promise
+            .catch((err) => {
+                err = afterFail(err);
+
+                return new Promise(function(resolve, reject) {
+                    setTimeout(reject.bind(null, err), retryDelay);
+                });
+            })
+    }
+
+    return promise;
+}
+export { makePromiseRetryable };
+
+function createRandomId() {
+    // by gordonbrander on GitHub:
+    // https://gist.github.com/gordonbrander/2230317
+    return Math.random().toString(36).substr(2, 10)
+}
+export { createRandomId };
