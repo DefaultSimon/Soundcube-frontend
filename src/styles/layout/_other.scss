@@ -33,13 +33,27 @@
 
             text-align: center;
 
+            // text 1
             &:first-of-type {
                 font-size: 1.8rem;
                 font-variant: all-small-caps;
             }
+            // text 2, 3
             &:not(:first-of-type) {
                 font-size: 0.95rem;
                 padding-top: 0;
+            }
+            // text 3
+            &:last-of-type {
+                margin-top: 10px;
+                font-size: 0.7rem;
+                letter-spacing: .3px;
+                cursor: pointer;
+
+                opacity: 0;
+                &.visible {
+                    animation: fadeIn-slideUp 0.85s $ease-out-quart forwards;
+                }
             }
         }
     }
@@ -51,19 +65,27 @@
 
     &.visible {
         visibility: visible;
-
-        animation-name: fadeinRoot;
-        animation-duration: .4s;
-        animation-timing-function: ease-in-out;
-        animation-fill-mode: forwards;
+        animation: fadeIn 0.4s ease-in-out forwards;
     }
 }
 
-@keyframes fadeinRoot {
+// Using animations instead of transitions because of stuff being briefly visible when loading the page
+@keyframes fadeIn {
     0% {
         opacity: 0;
     }
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes fadeIn-slideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
