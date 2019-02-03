@@ -50,7 +50,7 @@ class QueueAdd extends Component {
                 <div className="queue__add">
                     <TextField
                         id="video_id_input"
-                        label="Video ID"
+                        label="Search for a video"
                         value={this.state.searchText}
                         margin="normal"
                         variant="filled"

@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 
-import { RecordPlayer, PlaylistMusic, LibraryMusic, Tune } from 'mdi-material-ui';
+import { RecordPlayer, PlaylistMusic, Tune } from 'mdi-material-ui';
 
 
 const styles = theme => ({
@@ -48,11 +48,6 @@ class Sidebar extends Component {
                     icon: PlaylistMusic
                 },
                 {
-                    text: "Music",
-                    screen: "Music",
-                    icon: LibraryMusic
-                },
-                {
                     text: "Settings",
                     screen: "Settings",
                     icon: Tune
@@ -73,6 +68,7 @@ class Sidebar extends Component {
         return (
             <List component="nav" className="sidebar">
             {this.state.items.map(({ text, screen, icon }) => {
+                // Uppercase names are converted to components
                 const Icon = icon;
                 // Make the sidebar icon display if it is active
                 const selectedClass = screen === this.state.activeScreen ? "link active" : "link";
