@@ -35,7 +35,7 @@ const Events = {
     // args: array
     queueUpdated: "queueUpdated",
     // Emitted when the song info is updated
-    // args: none
+    // args: object containing song info
     songInfoUpdated: "songInfoUpdated",
     // Emitted when the playing status (progress bar) is updated
     // args: none

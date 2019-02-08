@@ -1,0 +1,39 @@
+// Custom styles for https://github.com/whoisandy/react-rangeslider
+
+.rangeslider {
+    display: block;
+    position: relative;
+
+    &-horizontal {
+        height: 8px;
+        border-radius: 2px;
+    }
+
+    &__fill {
+        height: 100%;
+        background-color: transparentize(lighten($secondary-color, 15%), 0.1);
+        top: 0;
+        border-radius: 2px;
+    }
+    &__handle {
+        height: 12px;
+        width: 12px;
+
+        border-radius: 4px;
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+
+        background: darken($secondary-color, 15%);
+        display: inline-block;
+        position: absolute;
+
+
+        &-label {
+
+        }
+    }
+    &__labels {
+        position: relative;
+    }
+
+}
