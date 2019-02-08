@@ -58,7 +58,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "GET",
             "/auth/youtubeApiKey",
-            null);
+            null
+        );
 
         log.debug("Got /auth/youtubeApiKey response");
         return response
@@ -69,7 +70,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "GET",
             "/ping",
-            null);
+            null
+        );
 
         log.debug("Got /ping response");
         return response
@@ -80,7 +82,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/quickQueue",
-            { song: url });
+            { song: url }
+        );
 
         log.debug("Got /player/quickQueue response");
         return response
@@ -90,7 +93,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "GET",
             "/music/player/getCurrentSong",
-            null);
+            null
+        );
 
         log.debug("Got /player/getCurrentSong response");
         return response
@@ -100,7 +104,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/play",
-            null);
+            null
+        );
 
         log.debug("Got /player/play response");
         return response
@@ -110,7 +115,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/pause",
-            null);
+            null
+        );
 
         log.debug("Got /player/pause response");
         return response
@@ -120,7 +126,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/resume",
-            null);
+            null
+        );
 
         log.debug("Got /player/resume response");
         return response
@@ -130,7 +137,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/stop",
-            null);
+            null
+        );
 
         log.debug("Got /player/stop response");
         return response;
@@ -140,7 +148,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/next",
-            null);
+            null
+        );
 
         log.debug("Got /player/next response");
         return response
@@ -150,7 +159,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/previous",
-            null);
+            null
+        );
 
         log.debug("Got /player/previous response");
         return response
@@ -160,7 +170,8 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "GET",
             "/music/player/audioTime",
-            null);
+            null
+        );
 
         log.debug("Got GET /player/audioTime response");
         return response
@@ -175,6 +186,26 @@ class SoundcubeApi {
             }
         );
         log.debug("Got PATCH /player/audioTime response");
+        return response;
+    };
+
+    player_volume_get = async () => {
+        let response = await this.send_http_request(
+            "GET",
+            "/music/player/audioVolume",
+            null
+        );
+        log.debug("Got GET /music/player/audioVolume response");
+        return response;
+    };
+
+    player_volume_set = async (volume) => {
+        let response = await this.send_http_request(
+            "POST",
+            "/music/player/audioVolume",
+            { "volume": volume }
+        );
+        log.debug("Got POST /music/player/audioVolume response");
         return response;
     };
 
