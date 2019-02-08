@@ -58,7 +58,7 @@ class ScreenContainer extends Component {
                     // Pass the isShown prop to the component if needed
                     let isVisible = item === this.state.currentScreen;
 
-                    return <ThisComponent key={item} screenContainer={screenContainerThis} isShown={isVisible} />
+                    return <ThisComponent key={item} screenContainer={screenContainerThis} isVisible={isVisible} />
                 })}
             </div>
         );

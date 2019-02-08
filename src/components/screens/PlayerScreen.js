@@ -27,10 +27,10 @@ const styles = theme => ({
 
 class PlayerScreen extends Component {
     render() {
-        const { isShown, classes } = this.props;
+        const { isVisible, classes } = this.props;
 
         return (
-            <div className={`screen fullwidth ${isShown ? "visible": ""}`}>
+            <div className={`screen fullwidth ${isVisible ? "visible": ""}`}>
                 <Card className={classes.cardWidth}>
                     <div className="screen__card">
                         <Typography component="h3" variant="h3" className={classes.playerTitle}>

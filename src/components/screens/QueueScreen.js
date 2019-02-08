@@ -5,10 +5,10 @@ import QueueSectionAdd from "./Queue/QueueAdd";
 
 class QueueScreen extends Component {
     render() {
-        const { isShown } = this.props;
+        const { isVisible } = this.props;
 
         return (
-            <div className={`container screen ${isShown ? "visible": ""}`}>
+            <div className={`container screen ${isVisible ? "visible": ""}`}>
                 <div className="queue">
                     <QueueSectionAdd />
                     <QueueList />
