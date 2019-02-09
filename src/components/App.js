@@ -1,18 +1,15 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import '../styles/main.scss';
-
 // api-related
-import soundcubeApi from '../core/Api';
-import eventHandler, { Events } from '../core/EventHandler';
+import api from '../core/Api';
+import eventHandler, {Events} from '../core/EventHandler';
 import globalStore from '../core/GlobalStore';
 import Logger from '../core/Logger';
-import { makePromiseRetryable } from "../core/Utilities";
-
+import {makePromiseRetryable} from "../core/Utilities";
 // Children
 import ScreenContainer from './ScreenContainer';
-
 // Material-UI
-import { createMuiTheme, withStyles } from "@material-ui/core/styles";
+import {createMuiTheme, withStyles} from "@material-ui/core/styles";
 import variables from '../styles/base/_variables.scss';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -24,8 +21,8 @@ import Typography from "@material-ui/core/es/Typography/Typography";
 import DrawerContainer from "./sidebar/DrawerContainer";
 
 // Utilities
-const log = new Logger("App");
-const logAuth = new Logger("Auth");
+const log = new Logger("App"),
+      logAuth = new Logger("Auth");
 
 // Material-UI palette and other stuff
 // Created from variables inside _variables.scss inside /styles/base/
@@ -76,13 +73,17 @@ class App extends Component {
         this.loadApp();
     }
 
+    /**
+     * Request a YouTube API key from the server
+     * @returns {Promise}
+     */
     fetchYoutubeApiKey = () => {
         /*
         Important: return the Promise, not a completed job!
         */
         logAuth.debug(`Fetching the YouTube API key from backend...`);
 
-        return soundcubeApi.auth_getYoutubeApiKey()
+        return api.auth_getYoutubeApiKey()
             .then((response) => {
                 if (response.status === 200) {
                     if (!response.data.hasOwnProperty("api_key")) {
@@ -97,28 +98,35 @@ class App extends Component {
             })
     };
 
+    /**
+     * Pings the server to check if it is responding
+     * @returns {Promise}
+     */
     checkServerAvailability = () => {
         /*
         Important: return the Promise, not a completed job!
         */
         log.debug("Checking server availability...");
 
-        return soundcubeApi.ping()
+        return api.ping()
             .then((response) => {
                 if (response.status !== 200) {
                     log.error("Server is not reachable!");
                     throw response;
-                }
-                else {
+                } else {
                     log.info("Server reachable.");
                 }
             })
     };
 
+    /**
+     * Called when the app is initially mounted. Shows loading progress and makes sure the mounted app is not visible
+     * until everything is loaded and ready.
+     */
     loadApp() {
         // Make sure the server is online, then load necessary resources
         const maxRetries = 4,
-              retryDelay = 2000;
+            retryDelay = 2000;
 
         // Set up handlers for some events
         let pQueue = eventHandler.waitForEventPromise(Events.queueUpdated);
@@ -135,7 +143,9 @@ class App extends Component {
                 this.checkServerAvailability(), maxRetries, retryDelay,
                 (r) => {
                     // This increments the fail counter
-                    if (!r.hasOwnProperty("failCount")) { r.failCount = 0 }
+                    if (!r.hasOwnProperty("failCount")) {
+                        r.failCount = 0
+                    }
                     r.failCount += 1;
 
                     loadingText2.innerHTML = `Checking server availability... <br>Failed, retrying (${r.failCount}/${maxRetries})`;
@@ -157,7 +167,9 @@ class App extends Component {
             await makePromiseRetryable(
                 this.fetchYoutubeApiKey(), maxRetries, retryDelay,
                 (r) => {
-                    if (!r.hasOwnProperty("failCount")) { r.failCount = 0 }
+                    if (!r.hasOwnProperty("failCount")) {
+                        r.failCount = 0
+                    }
                     r.failCount += 1;
 
                     loadingText2.innerHTML = `Fetching resources... <br>Failed, retrying (${r.failCount}/${maxRetries})`;
@@ -182,6 +194,8 @@ class App extends Component {
             loadingText2.innerHTML = "Waiting for player to update... (2/2)";
             await pSongInfo;
 
+            loadingText2.innerHTML = "All done!"
+
         }).then(() => {
             // Fade-out the loading bar and fade-in the mounted content
             loadingBar.classList.add("loaded");
@@ -190,7 +204,7 @@ class App extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return (
             <div className="body">
@@ -199,9 +213,10 @@ class App extends Component {
 
                 {/* Top bar */}
                 <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar variant="dense" className="toolbar" onClick={() => eventHandler.emitEvent(Events.toggleDrawerState)}>
+                    <Toolbar variant="dense" className="toolbar"
+                             onClick={() => eventHandler.emitEvent(Events.toggleDrawerState)}>
                         <IconButton className={classes.iconButton}>
-                            <MenuIcon className={classes.menuIcon} />
+                            <MenuIcon className={classes.menuIcon}/>
                         </IconButton>
                         <Typography variant="h5" color="inherit">
                             Soundcube
@@ -210,7 +225,7 @@ class App extends Component {
                 </AppBar>
 
                 {/* Left drawer */}
-                <DrawerContainer />
+                <DrawerContainer/>
 
                 {/* Screens */}
                 <main>

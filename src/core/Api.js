@@ -2,6 +2,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 
 import Logger from './Logger';
+
 const log = new Logger("Api");
 
 class SoundcubeApi {
@@ -20,9 +21,16 @@ class SoundcubeApi {
         this.token = token;
     }
 
+    /**
+     * Sends an HTTP request using axios.
+     * @param {string} type_ - HTTP request type (GET, POST, PATCH, ...)
+     * @param {string} route - what route to send the request to
+     * @param {object | null} data - what data to send with the request
+     * @returns {Promise<AxiosResponse>}
+     */
     async send_http_request(type_, route, data) {
         /*
-        Fetches an url and returns an axios response (uses Promises)
+        Fetches an url and returns an axios response (uses Promises). Note: returns a Promise that is not yet fulfilled
          */
         return axios({
             method: type_,
@@ -37,8 +45,7 @@ class SoundcubeApi {
                 log.error(`Request was sent, but no response was received: ${error}`);
 
                 error.requestFailed = true;
-            }
-            else if (typeof error.request === "undefined" && typeof error.response === "undefined") {
+            } else if (typeof error.request === "undefined" && typeof error.response === "undefined") {
                 // Something went wrong even before sending the request
                 log.error(`Request couldn't even be sent: ${error}`);
 
@@ -82,7 +89,7 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/quickQueue",
-            { song: url }
+            {song: url}
         );
 
         log.debug("Got /player/quickQueue response");
@@ -203,7 +210,7 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/player/audioVolume",
-            { "volume": volume }
+            {"volume": volume}
         );
         log.debug("Got POST /music/player/audioVolume response");
         return response;
@@ -225,7 +232,7 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/queue/add",
-            { song: songUrl, position: position, set_playing: setPlaying });
+            {song: songUrl, position: position, set_playing: setPlaying});
 
         log.debug("Got /queue/add response");
         return response
@@ -235,7 +242,7 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/queue/remove",
-            { position: songPosition });
+            {position: songPosition});
 
         log.debug("Got /queue/remove response");
         return response
@@ -245,7 +252,7 @@ class SoundcubeApi {
         let response = await this.send_http_request(
             "POST",
             "/music/queue/move",
-            { current_index: oldIndex, new_index: newIndex });
+            {current_index: oldIndex, new_index: newIndex});
 
         log.debug("Got /queue/move response");
         return response
@@ -253,6 +260,6 @@ class SoundcubeApi {
 }
 
 // Allows only one instance
-const soundcubeApi = new SoundcubeApi();
+const api = new SoundcubeApi();
 
-export default soundcubeApi;
+export default api;

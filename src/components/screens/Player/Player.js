@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import eventHandler, {Events} from "../../../core/EventHandler";
-
 // Material-UI
 import PlayerTrackProgressBar from "./PlayerTrackProgressBar";
 import PlayerControlBar from "./PlayerBar";
@@ -14,10 +13,15 @@ class Player extends Component {
             currentSongTitle: null
         };
 
-        eventHandler.subscribeToEvent(Events.songInfoUpdated, this.onSongUpdate, "player_onsongupdate")
+        eventHandler.subscribeToEvent(Events.songInfoUpdated, this.onSongUpdated, "player_onsongupdated")
     }
 
-    onSongUpdate = data => {
+    /**
+     * Update the song with new data, extracts the title
+     * @param {object} data - An object containing the new song information
+     */
+    onSongUpdated = data => {
+        console.log("got song updatee");
         const title = data === null ? null : data.title;
 
         this.setState({
@@ -26,7 +30,7 @@ class Player extends Component {
     };
 
     render() {
-        const { className } = this.props;
+        const {className} = this.props;
 
         return (
             <div className={`player flex col flex--middle ${className}`}>
@@ -37,8 +41,8 @@ class Player extends Component {
                     }
                 </div>
                 {/* TODO make this dynamic */}
-                <PlayerTrackProgressBar />
-                <PlayerControlBar />
+                <PlayerTrackProgressBar/>
+                <PlayerControlBar/>
             </div>
         );
     }

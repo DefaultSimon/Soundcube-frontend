@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Sidebar from "./Sidebar";
 
-import eventHandler, { Events } from "../../core/EventHandler";
+import eventHandler, {Events} from "../../core/EventHandler";
 
-import { withStyles } from "@material-ui/core";
+import {withStyles} from "@material-ui/core";
 import Drawer from "@material-ui/core/Drawer";
 
 const drawerWidth = 190;
@@ -45,6 +45,9 @@ class DrawerContainer extends Component {
         eventHandler.subscribeToEvent(Events.toggleDrawerState, this.toggleDrawerState)
     }
 
+    /**
+     * Open/Close the drawer
+     */
     toggleDrawerState = () => {
         this.setState({
             isOpen: !this.state.isOpen
@@ -52,11 +55,11 @@ class DrawerContainer extends Component {
     };
 
     render() {
-        const { classes } = this.props;
-        const { isOpen } = this.state;
+        const {classes} = this.props,
+              {isOpen} = this.state;
 
-        let drawerClass = [classes.drawer, isOpen ? classes.open : classes.close].join(" ");
-        let paperClass = [classes.drawerPaper, isOpen ? classes.open : classes.close].join(" ");
+        const drawerClass = [classes.drawer, isOpen ? classes.open : classes.close].join(" "),
+              paperClass = [classes.drawerPaper, isOpen ? classes.open : classes.close].join(" ");
 
         return (
             <Drawer

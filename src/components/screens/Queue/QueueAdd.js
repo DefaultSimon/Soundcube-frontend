@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import soundcubeApi from '../../../core/Api';
 import eventHandler, {Events} from "../../../core/EventHandler";
 
-import { withStyles } from "@material-ui/core";
+// Material-ui
+import {withStyles} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
-
-import { Close } from "mdi-material-ui";
+// Material icons
+import {Close} from "mdi-material-ui";
 
 import QueueSearchChooser from './QueueSearchChooser';
 
@@ -32,18 +32,19 @@ class QueueAdd extends Component {
             isSnackbarOpen: false,
             snackbarMessage: null
         };
-
-        this.api = soundcubeApi;
     }
 
+    /**
+     * Triggered when the TextField updates
+     */
     onInputUpdate = (event) => {
-        this.setState({ searchText: event.target.value });
+        this.setState({searchText: event.target.value});
 
         eventHandler.emitEvent(Events.searchTextUpdated, event.target.value)
     };
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return (
             <div>

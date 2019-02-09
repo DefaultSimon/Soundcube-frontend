@@ -2,8 +2,13 @@
 Logging Helpers
  */
 
+/**
+ * Simple Logger that prepends the instance name for easier debugging of bigger projects.
+ *
+ * Format: [LoggerName] <your message>
+ */
 class Logger {
-    constructor (name) {
+    constructor(name) {
         this.name = name;
     }
 

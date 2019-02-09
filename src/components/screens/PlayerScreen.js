@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import Player from './Player/Player';
-
 // Material-UI
-import { withStyles } from "@material-ui/core/styles";
+import {withStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
@@ -27,7 +26,7 @@ const styles = theme => ({
 
 class PlayerScreen extends Component {
     render() {
-        const { isVisible, classes } = this.props;
+        const {isVisible, classes} = this.props;
 
         return (
             <div className={`screen fullwidth ${isVisible ? "visible": ""}`}>

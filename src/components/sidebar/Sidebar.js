@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import eventHandler, { Events } from '../../core/EventHandler';
+import eventHandler, {Events} from '../../core/EventHandler';
 
 // Material UI
-import { withStyles } from "@material-ui/core/styles";
+import {withStyles} from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 
-import { RecordPlayer, PlaylistMusic, Tune } from 'mdi-material-ui';
+import {RecordPlayer, PlaylistMusic, Tune} from 'mdi-material-ui';
 
 
 const styles = theme => ({
@@ -57,30 +57,37 @@ class Sidebar extends Component {
         }
     }
 
+    /**
+     * Loads (well, shows; screens are always loaded) the required screen
+     * @param {string} screen - name of the screen to load
+     */
     loadClickedScreen = (screen) => {
-        this.setState({ activeScreen: screen });
+        this.setState({activeScreen: screen});
         eventHandler.emitEvent(Events.moveToScreen, screen)
     };
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return (
             <List component="nav" className="sidebar">
-            {this.state.items.map(({ text, screen, icon }) => {
-                // Uppercase names are converted to components
-                const Icon = icon;
-                // Make the sidebar icon display if it is active
-                const selectedClass = screen === this.state.activeScreen ? "link active" : "link";
+                {this.state.items.map(({text, screen, icon}) => {
+                    // Uppercase names are converted to components
+                    const Icon = icon;
+                    // Make the sidebar icon display if it is active
+                    const selectedClass = screen === this.state.activeScreen ? "link active" : "link";
 
-                return (
-                    <ListItem key={text} className={selectedClass} button onClick={() => this.loadClickedScreen(screen)}>
-                        <ListItemIcon classes={{ root: classes.listItemIconMargin }}>
-                            <Icon/>
-                        </ListItemIcon>
-                        <ListItemText classes={{ root: classes.listItemPadding, primary: classes.listItemText }} primary={text}/>
-                    </ListItem>);
-            })}
+                    return (
+                        <ListItem key={text} className={selectedClass} button
+                                  onClick={() => this.loadClickedScreen(screen)}>
+                            <ListItemIcon classes={{root: classes.listItemIconMargin}}>
+                                <Icon/>
+                            </ListItemIcon>
+                            <ListItemText classes={{root: classes.listItemPadding, primary: classes.listItemText}}
+                                          primary={text}/>
+                        </ListItem>
+                    );
+                })}
             </List>
         );
     }

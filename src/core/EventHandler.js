@@ -1,6 +1,6 @@
 // Event handler
 import Logger from './Logger';
-import { createRandomId } from "./Utilities";
+import {createRandomId} from "./Utilities";
 
 const log = new Logger("EventHandler");
 
@@ -52,6 +52,13 @@ class EventHandler {
         this.subscribers = {};
     }
 
+    /**
+     * Attaches a callback to the event
+     * @param {Events} eventName - an event type
+     * @param {Function} callback - function to be called when the event is triggered
+     * @param {string | null} callbackName - (optional) under what name the callback should be stored (useful for removing the callback later)
+     * @returns {string} - callback name that was generated, if you didn't provide one
+     */
     subscribeToEvent(eventName, callback = null, callbackName = null) {
         /*
         Subscribes you to an event. Callback is called when the event triggers and
@@ -92,6 +99,10 @@ class EventHandler {
         return callbackName;
     }
 
+    /**
+     * Removes a callback
+     * @param {string} callbackName
+     */
     removeCallback(callbackName) {
         if (!this.callbacks.hasOwnProperty(callbackName)) {
             throw new Error("This callbackName is not available!");
@@ -103,6 +114,11 @@ class EventHandler {
 
     }
 
+    /**
+     * Turns an event into a promise
+     * @param {Events} eventName - an event type
+     * @returns {Promise}
+     */
     waitForEventPromise(eventName) {
         /*
         Returns a promise that is resolved when the event is triggered.
@@ -118,6 +134,11 @@ class EventHandler {
         })
     }
 
+    /**
+     * Emits an event, calling all subscribers with the provided arguments
+     * @param {Events} eventName - an event type
+     * @param args - your arguments to be passed to subscribers
+     */
     emitEvent(eventName, ...args) {
         // Make sure there are subscribers
         if (!this.subscribers.hasOwnProperty(eventName)) {
@@ -137,14 +158,12 @@ class EventHandler {
                         this.subscribers[eventName].splice(i, 1);
                         log.warn(`Callback ${cbName} was not available, removed from event: ${eventName}.`)
                     }
-                }
-                else {
+                } else {
                     // Fetch the callback and call it with the provided arguments
                     let cb = this.callbacks[cbName];
                     cb(...args)
                 }
-            }
-            catch(err) {
+            } catch (err) {
                 log.warn(`Emitting event, but ${cbName} failed.`);
                 log.warn(err);
             }
@@ -155,4 +174,4 @@ class EventHandler {
 const eventHandler = new EventHandler();
 
 export default eventHandler;
-export { Events };
+export {Events};

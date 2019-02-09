@@ -8,11 +8,20 @@ class GlobalStore {
         this.store = {}
     }
 
+    /**
+     * Stores an object
+     * @param {any} key
+     * @param {any} object
+     */
     putInStore(key, object) {
         this.store[key] = object;
         log.debug(`New object in store under key: ${key}`)
     }
 
+    /**
+     * Deletes a key-value pair
+     * @param {any} key
+     */
     deleteFromStore(key) {
         if (this.store.hasOwnProperty(key)) {
             delete this.store[key];
@@ -20,13 +29,13 @@ class GlobalStore {
         }
     }
 
+    /**
+     * Returns an object in store by key
+     * @param {any} key
+     * @returns {any | null}
+     */
     getFromStore(key) {
-        if (this.store.hasOwnProperty(key)) {
-            return this.store[key]
-        }
-        else {
-            return null
-        }
+        return this.store.hasOwnProperty(key) ? this.store[key] : null
     }
 }
 

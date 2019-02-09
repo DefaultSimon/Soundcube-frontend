@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import api from '../../../core/Api';
 import Logger from '../../../core/Logger';
@@ -26,6 +26,10 @@ class PlayerBarVolume extends Component {
             })
     }
 
+    /**
+     * Called when the slider changes, rate-limits how often the volume should be changed
+     * @param {int} value - A number from 0 to 100
+     */
     onValueChange = (value) => {
         this.setState({ volume: value });
 
@@ -36,17 +40,15 @@ class PlayerBarVolume extends Component {
         this.volumeSetTimeout = setTimeout(() => {this.setVolume(value)}, 75);
     };
 
+    /**
+     * Sends volume change requests to the server
+     * @param volume
+     */
     setVolume = (volume) => {
         console.log(volume);
 
         api.player_volume_set(volume)
-            .catch((err) => {
-                if (err.requestFailed) {
-                    return;
-                }
-
-                console.log(err.response);
-            });
+            .catch((err) => {});
     };
 
 

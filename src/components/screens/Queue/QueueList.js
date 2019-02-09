@@ -1,20 +1,21 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import Logger from "../../../core/Logger";
-import eventHandler, { Events } from '../../../core/EventHandler';
-import soundcubeApi from '../../../core/Api';
-import { resolveTime } from "../../../core/Utilities";
+import eventHandler, {Events} from '../../../core/EventHandler';
+import api from '../../../core/Api';
+import {resolveTime} from "../../../core/Utilities";
 
-import { Drag, CloseCircle } from "mdi-material-ui";
+import {arrayMove, SortableContainer, SortableElement, SortableHandle} from 'react-sortable-hoc';
 
-import { SortableContainer, SortableElement, arrayMove, SortableHandle } from 'react-sortable-hoc';
-
-import { withStyles } from "@material-ui/core";
+// Material-UI
+import {withStyles} from "@material-ui/core";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+// Material icons
+import {CloseCircle, Drag} from "mdi-material-ui";
 
 const log = new Logger("QueueList");
 
@@ -63,30 +64,29 @@ const QueueItem = withStyles(styles)(SortableElement(({classes, indexNum, value:
 )));
 
 // A container for rendering the skeleton of the queue, which is a table
-const QueueItemContainer = withStyles(styles)(SortableContainer(({ classes, items, removeItemCallback }) => {
-        return (
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell classes={{root: classes.cellStyle}}>Title</TableCell>
-                        <TableCell classes={{root: classes.cellStyle}}>Length</TableCell>
-                        <TableCell classes={{root: classes.cellStyle}}>Video ID</TableCell>
-                        <TableCell classes={{root: classes.iconCellStyle}}/>
-                        <TableCell classes={{root: classes.iconCellStyle}}/>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {items.map((value, index) => {
-                        return <QueueItem
-                            key={"queue-" + value.unique_id}
-                            index={index}
-                            indexNum={index}
-                            value={value}
-                            removeItemCallback={removeItemCallback}/>
-                    })}
-                </TableBody>
-            </Table>);
-}));
+const QueueItemContainer = withStyles(styles)(SortableContainer(({ classes, items, removeItemCallback }) => (
+    <Table>
+        <TableHead>
+            <TableRow>
+                <TableCell classes={{root: classes.cellStyle}}>Title</TableCell>
+                <TableCell classes={{root: classes.cellStyle}}>Length</TableCell>
+                <TableCell classes={{root: classes.cellStyle}}>Video ID</TableCell>
+                <TableCell classes={{root: classes.iconCellStyle}}/>
+                <TableCell classes={{root: classes.iconCellStyle}}/>
+            </TableRow>
+        </TableHead>
+        <TableBody>
+            {items.map((value, index) => {
+                return <QueueItem
+                    key={"queue-" + value.unique_id}
+                    index={index}
+                    indexNum={index}
+                    value={value}
+                    removeItemCallback={removeItemCallback}/>
+            })}
+        </TableBody>
+    </Table>
+)));
 
 class QueueList extends Component {
     constructor(props) {
@@ -96,73 +96,79 @@ class QueueList extends Component {
             queue: []
         };
 
-        this.api = soundcubeApi;
-
         eventHandler.subscribeToEvent(Events.updateQueue, this.refreshQueue, "queue_list_refresh");
         eventHandler.subscribeToEvent(Events.updateQueueWithData, this.setQueue, "queue_list_set");
     }
 
+    componentDidMount() {
+        this.refreshQueue();
+    }
+
+    /**
+     * Re-renders the component with the new queue
+     * @param {array} queue
+     */
     setQueue = (queue) => {
         log.info("Queue updated");
         this.setState({
             queue: queue
         });
 
-        eventHandler.emitEvent(Events.queueUpdated)
+        eventHandler.emitEvent(Events.queueUpdated, queue)
     };
 
+    /**
+     * Fetches the current queue from the server and updates the component
+     */
     refreshQueue = () => {
-        this.api.queue_get()
+        api.queue_get()
             .then((response) => {
                 if (response.status === 200) {
-                    this.setQueue(response.data.queue)
-                }
-                else {
+                    this.setQueue(response.data.queue);
+                } else {
                     log.warn(`Tried to get queue, got status code: ${response.status}`)
                 }
             })
-            .finally(() => {
+            .catch(() => {
                 eventHandler.emitEvent(Events.queueUpdated)
             })
     };
 
+    /**
+     * Removes an item from the queue, both sending data to the server and updating the component
+     * @param {int} position - index of the item to remove
+     */
     removeItemFromQueue = (position) => {
-        console.log(position);
-
-        this.api.queue_remove(position)
+        api.queue_remove(position)
             .then((response) => {
                 if (response.status === 200) {
                     // Removed, update queue
-                    this.setQueue(response.data.new_queue)
-                }
-                else if (response.status === 441) {
+                    this.setQueue(response.data["new_queue"])
+                } else if (response.status === 441) {
                     // No such song
                     log.warn("Encountered invalid queue index while removing?!")
                 }
             })
-            .catch(err => {
-                if (err.requestFailed) {
-                    return;
-                }
-            });
+            .catch(err => {});
     };
 
-    componentDidMount() {
-        this.refreshQueue();
-    }
-
+    /**
+     * Called when the user stops sorting elements in the queue
+     * @param {int} oldIndex - old position
+     * @param {int} newIndex - new position
+     */
     onSortEnd = ({oldIndex, newIndex}) => {
-        log.info(`Sort end: ${oldIndex}, ${newIndex}`);
+        log.debug(`User ended sorting: ${oldIndex} to ${newIndex}`);
 
         // Update queue on screen, then send move request
         this.setState({queue: arrayMove(this.state.queue, oldIndex, newIndex)});
-        this.api.queue_move(oldIndex, newIndex)
+        api.queue_move(oldIndex, newIndex)
             .then((response) => {
                 if (response.status === 200) {
-                    log.debug(`New queue state: ${JSON.stringify(response.data.new_queue)}`);
+                    log.debug(`New queue state: ${JSON.stringify(response.data["new_queue"])}`);
 
                     // Update queue with new data that was received
-                    this.setQueue(response.data.new_queue)
+                    this.setQueue(response.data["new_queue"])
                 }
             })
             .finally(() => {

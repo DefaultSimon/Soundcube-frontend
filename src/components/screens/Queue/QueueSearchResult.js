@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { withStyles } from "@material-ui/core";
+// Material-UI
+import {withStyles} from "@material-ui/core";
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
@@ -24,6 +25,10 @@ class QueueSearchResult extends Component {
         }
     }
 
+    /**
+     * Processes a click and opens/closes the "Add to queue" overlay
+     * @param e
+     */
     handleElementClick = (e) => {
         // Always triggers if the overlay is not open
         // It only closes if the button is not the thing that was clicked
@@ -33,7 +38,7 @@ class QueueSearchResult extends Component {
     };
 
     render() {
-        const { classes, item } = this.props;
+        const {classes, item} = this.props;
 
         return (
             <TableRow className={classes.tableRow} onClick={this.handleElementClick}>

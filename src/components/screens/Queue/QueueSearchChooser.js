@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import Logger from '../../../core/Logger';
 import eventHandler, {Events} from "../../../core/EventHandler";
 
+// YouTube search library
 import youtubeSearch from 'youtube-search';
 
-import { withStyles } from "@material-ui/core";
+// Material-UI
+import {withStyles} from "@material-ui/core";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -50,8 +52,7 @@ class QueueSearchChooser extends Component {
         eventHandler.subscribeToEvent(Events.youtubeApiKeyFetched, (key) => {
             if (key === null) {
                 log.warn("API key is not present!")
-            }
-            else {
+            } else {
                 log.debug("Got API key.")
             }
 
@@ -60,6 +61,10 @@ class QueueSearchChooser extends Component {
         eventHandler.subscribeToEvent(Events.searchTextUpdated, this.handleSearchChange, "queue_search_handlechange");
     }
 
+    /**
+     * Waits until the user stops typing (idle for 450ms) and fetches a search result from YouTube
+     * @param {string} value - what to search for
+     */
     handleSearchChange = (value) => {
         clearTimeout(this.searchTimeout);
 
@@ -70,6 +75,10 @@ class QueueSearchChooser extends Component {
         }, 450)
     };
 
+    /**
+     * Searches YouTube and updates the table with results
+     * @param {string} searchParameter - what to search for
+     */
     searchYoutube = (searchParameter) => {
         if (!searchParameter) {
             this.setState({searchItems: []});
@@ -78,18 +87,17 @@ class QueueSearchChooser extends Component {
 
         youtubeSearch(searchParameter, this.youtubeOpts)
             .then(data => {
-                console.log(data.results.map(item => (item.title)));
+                log.debug(`Fetched search results, got: ${JSON.stringify(data.results.map(item => (item.title)))}`);
 
                 this.setState({searchItems: data.results})
             })
             .catch(err => {
-                log.warn("Something went wrong while fetching YouTube videos...");
-                console.log(err);
+                log.warn(`Something went wrong while fetching YouTube videos... ${err}`);
             })
     };
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
         const hasElements = this.state.searchItems.length !== 0;
 
         if (hasElements) {
@@ -103,10 +111,11 @@ class QueueSearchChooser extends Component {
                         </TableHead>
                         <TableBody>
                             {
-                                this.state.searchItems.map(item =>
-                                    (<QueueSearchElement
+                                this.state.searchItems.map(item => (
+                                    <QueueSearchElement
                                         key={item.id}
-                                        item={item}/>))
+                                        item={item}/>
+                                    ))
                             }
                         </TableBody>
                     </Table>

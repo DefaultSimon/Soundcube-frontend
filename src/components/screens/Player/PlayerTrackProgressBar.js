@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Logger from '../../../core/Logger';
-import soundcubeApi from '../../../core/Api';
+import api from '../../../core/Api';
 import eventHandler, { Events } from '../../../core/EventHandler';
 import { resolveTime, timeFormatWithColon } from '../../../core/Utilities';
 
@@ -16,8 +16,6 @@ class PlayerTrackProgressBar extends Component {
             totalTime: 0,
             isPlaying: false
         };
-
-        this.api = soundcubeApi;
         this.interval = null;
 
         this.playerTrack = React.createRef();
@@ -25,25 +23,45 @@ class PlayerTrackProgressBar extends Component {
         eventHandler.subscribeToEvent(Events.updatePlayingStatus, this.updatePlayingStatus, "player_track_update")
     }
 
+    componentDidMount() {
+        this.updateTimeInfo();
+        this.setRefreshInterval();
+    }
+
+    componentWillUnmount() {
+        this.removeProgressInterval();
+        this.removeRefreshInterval();
+    }
+
+    /**
+     * Starts an interval that triggers every second to update the progress bar.
+     */
     setProgressInterval() {
         log.debug("Setting interval for time updates...");
 
         // Clear previous interval
         clearInterval(this.interval);
+
+        // Set delays and note that the interval is running
         const delay = 1000;
         this.intervalIsRunning = true;
 
-        // this.setState({isPlaying: true});
         this.interval = setInterval(() => {
             this.setState({time: parseFloat(this.state.time) + (delay / 1000)})
         }, delay)
     }
 
+    /**
+     * Stops the interval that triggers every second to update the progress bar.
+     */
     removeProgressInterval() {
         this.intervalIsRunning = false;
         clearInterval(this.interval);
     }
 
+    /**
+     * Starts an interval that triggers every 10 seconds to refresh the playing state
+     */
     setRefreshInterval() {
         const refreshInterval = 10000;
 
@@ -54,12 +72,18 @@ class PlayerTrackProgressBar extends Component {
         }, refreshInterval)
     }
 
+    /**
+     * Stops the interval that triggers every 10 seconds to refresh the playing state
+     */
     removeRefreshInterval() {
         clearInterval(this.refreshInterval);
     }
 
+    /**
+     * Requests current track time from the server and updates the progress bar accordingly
+     */
     updateTimeInfo() {
-        this.api.player_time_get()
+        api.player_time_get()
             .then((response) => {
                 if (response.status === 200) {
 
@@ -67,8 +91,10 @@ class PlayerTrackProgressBar extends Component {
                     const totalTime = response.data["total_length"];
                     const isPlaying = response.data["is_playing"];
 
-                    if (typeof newTime === "undefined" || typeof totalTime === "undefined") {
-                        log.error("newTime and totalTime are undefined, this shouldn't happen!!");
+                    if (typeof newTime === "undefined"
+                        || typeof totalTime === "undefined"
+                        || typeof isPlaying === "undefined") {
+                        log.error("Something is undefined, this shouldn't happen!!");
                         return;
                     }
 
@@ -99,16 +125,10 @@ class PlayerTrackProgressBar extends Component {
             });
     }
 
-    componentDidMount() {
-        this.updateTimeInfo();
-        this.setRefreshInterval();
-    }
-
-    componentWillUnmount() {
-        this.removeProgressInterval();
-        this.removeRefreshInterval();
-    }
-
+    /**
+     * Updates the progress bar
+     * @param {object} options - contains supported key-value pairs (forceIsPlaying, startAt, refreshIn)
+     */
     updatePlayingStatus = (options) => {
         const { forceIsPlaying = null, startAt = null, refreshIn = null } = options;
 
@@ -137,6 +157,10 @@ class PlayerTrackProgressBar extends Component {
         }
     };
 
+    /**
+     * Processes a mouse click to scrub along the track progress bar
+     * @param {GlobalEventHandlers.onclick} e
+     */
     handleMouseClick = (e) => {
         const x = e.nativeEvent.offsetX;
         const totalWidth = this.playerTrack.current.offsetWidth;
@@ -147,7 +171,7 @@ class PlayerTrackProgressBar extends Component {
 
         log.debug(`Clicked at ${(amount * 100).toFixed(1)}%, changing time to ${timeSeconds}...`);
 
-        this.api.player_time_set(timeSeconds)
+        api.player_time_set(timeSeconds)
             .then((response) => {
                 if (response.status === 200) {
                     log.info("Changed time!");
