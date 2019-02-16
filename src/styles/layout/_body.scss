@@ -11,18 +11,38 @@
 
 main {
     // Resizes the main container to fit remaining space
-    $appbar: 50px;
-    $drawer: 190px;
+    // $appbar: 50px;
+    // $drawer: 190px;
+    //
+    // position: absolute;
+    // width: calc(100% - #{$drawer});
+    // height: calc(100% - #{$appbar});
+    //
+    // max-width: calc(100% - #{$drawer});
+    // max-height: calc(100% - #{$appbar});
+    //
+    // overflow: hidden;
+    //
+    // top: 50px;
+    // left: $drawer
 
     position: absolute;
-    width: calc(100% - #{$drawer});
-    height: calc(100% - #{$appbar});
+    top: 0;
+    left: 0;
 
-    max-width: calc(100% - #{$drawer});
-    max-height: calc(100% - #{$appbar});
+    width: 100%;
+    height: 100%;
 
     overflow: hidden;
 
-    top: 50px;
-    left: $drawer
+    @include media("<=phone") {
+        .screens {
+            .screen {
+                padding-left: 0;
+                padding-bottom: 0;
+                padding-right: 0;
+            }
+        }
+    }
+
 }

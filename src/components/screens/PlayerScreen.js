@@ -30,14 +30,12 @@ class PlayerScreen extends Component {
 
         return (
             <div className={`screen fullwidth ${isVisible ? "visible": ""}`}>
-                <Card className={classes.cardWidth}>
-                    <div className="screen__card">
-                        <Typography component="h3" variant="h3" className={classes.playerTitle}>
-                            Player
-                        </Typography>
-                        <Divider className={classes.divider} />
-                        <Player className={classes.playerComponent} />
-                    </div>
+                <Card className="screen__card">
+                    <Typography component="h3" variant="h3" className={classes.playerTitle}>
+                        Player
+                    </Typography>
+                    <Divider className={classes.divider} />
+                    <Player className={classes.playerComponent} />
                 </Card>
             </div>
         );

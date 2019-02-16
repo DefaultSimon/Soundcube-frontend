@@ -23,6 +23,12 @@ const Events = {
     // Toggle drawer open/close
     // args: none
     toggleDrawerState: "toggleDrawerState",
+    // Drawer was opened
+    // args: none
+    drawerWasOpened: "drawerWasOpened",
+    // Drawer was closed
+    drawerWasClosed: "drawerWasClosed",
+    // args: none
 
     // (mostly) one-time triggers
     // Emitted when the YouTube API key is fetched

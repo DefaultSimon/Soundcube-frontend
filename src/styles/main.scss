@@ -5,16 +5,21 @@
  */
 
 // Configuration
-@import "base/variables";
-@import "base/mixins";
 
-@import "components/_utilities.scss";
-@import "components/_spinkit2.scss";
-@import "components/_animations.scss";
-@import "components/_rangeslider.scss";
+// Import include-media library
+@import "../../node_modules/include-media/dist/include-media";
+@import "base/im-to-em";
+
+@import "base/variables";
+
+@import "components/utilities";
+@import "components/spinkit2";
+@import "components/animations";
+@import "components/rangeslider";
 
 @import "layout/body";
 @import "layout/sidebar";
 @import "layout/screen";
+@import "layout/drawer";
 
 @import "layout/other";

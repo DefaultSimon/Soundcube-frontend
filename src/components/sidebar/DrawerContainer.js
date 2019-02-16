@@ -3,36 +3,7 @@ import Sidebar from "./Sidebar";
 
 import eventHandler, {Events} from "../../core/EventHandler";
 
-import {withStyles} from "@material-ui/core";
 import Drawer from "@material-ui/core/Drawer";
-
-const drawerWidth = 190;
-
-const styles = theme => ({
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0
-    },
-    drawerPaper: {
-        top: 42
-    },
-
-    open: {
-        width: drawerWidth,
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    },
-    close: {
-        transition: theme.transitions.create('width', {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        overflowX: 'hidden',
-        width: theme.spacing.unit * 7 + 1
-    },
-});
 
 class DrawerContainer extends Component {
     constructor(props) {
@@ -55,19 +26,17 @@ class DrawerContainer extends Component {
     };
 
     render() {
-        const {classes} = this.props,
-              {isOpen} = this.state;
+        const {isOpen} = this.state;
 
-        const drawerClass = [classes.drawer, isOpen ? classes.open : classes.close].join(" "),
-              paperClass = [classes.drawerPaper, isOpen ? classes.open : classes.close].join(" ");
+        // The drawer has a class open, if opened
+        const statusClassName = ["drawer", isOpen ? "open": ""].join(" ");
 
         return (
             <Drawer
-                className={classes.drawer}
+                className={statusClassName}
                 variant="permanent"
-                classes={{
-                    root: drawerClass,
-                    paper: paperClass
+                PaperProps={{
+                    className:"drawer--paper"
                 }}
                 open={isOpen}>
                 <Sidebar/>
@@ -76,4 +45,4 @@ class DrawerContainer extends Component {
     }
 }
 
-export default withStyles(styles)(DrawerContainer);
+export default DrawerContainer;

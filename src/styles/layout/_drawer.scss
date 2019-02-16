@@ -1,0 +1,29 @@
+.drawer {
+    $drawer-closed-width: 57px;
+    $drawer-open-width: 190px;
+
+    overflow-x: hidden;
+    width: $drawer-closed-width;
+
+    transition: .4s $ease-out-quart;
+    flex-shrink: 0;
+
+    &--paper {
+        position: relative;
+        top: 42px;
+    }
+
+    &.open {
+        width: $drawer-open-width;
+    }
+
+    // This uses translateX to move the screen container when the sidebar is open
+    & + main {
+        transform: translateX($drawer-closed-width);
+        transition: .4s $ease-out-quart;
+    }
+
+    &.open + main {
+        transform: translateX($drawer-open-width);
+    }
+}

@@ -28,18 +28,19 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <script>
-      window.CONFIG = {
-        host: "{{soundcube_host}}",
-        port: "{{soundcube_port}}"
-      };
+        window.CONFIG = {
+            host: "{{soundcube_host}}",
+            port: "{{soundcube_port}}"
+        };
 
-      // If this is a dev build (meaning no server formatting), fall back to the default values
-      if (window.CONFIG.host.startsWith("{{")) {
-        window.CONFIG.host = "localhost"
-      }
-      if (window.CONFIG.port.startsWith("{{")) {
-        window.CONFIG.port = "8080"
-      }
+        // If this is a dev build (meaning no server formatting), fall back to the default values
+        if (window.CONFIG.host.startsWith("{{")) {
+            // defaults to the current hostname
+            window.CONFIG.host = location.hostname
+        }
+        if (window.CONFIG.port.startsWith("{{")) {
+            window.CONFIG.port = "8080"
+        }
     </script>
 
     <!-- This is where the React app is mounted -->
