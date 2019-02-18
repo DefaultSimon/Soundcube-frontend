@@ -152,7 +152,9 @@ class EventHandler {
             return;
         }
 
-        let callbacks = this.subscribers[eventName];
+        // Clones the array so there are no problems when changing it inside the for loop
+        let callbacks = this.subscribers[eventName].slice();
+        // Loop over all callbacks
         callbacks.forEach((cbName) => {
             try {
                 // Fetch callback from callbackName
@@ -163,6 +165,8 @@ class EventHandler {
                     if (i > -1) {
                         this.subscribers[eventName].splice(i, 1);
                         log.warn(`Callback ${cbName} was not available, removed from event: ${eventName}.`)
+                    } else {
+                        log.warn("What the shit?")
                     }
                 } else {
                     // Fetch the callback and call it with the provided arguments

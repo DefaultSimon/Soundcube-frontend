@@ -80,6 +80,8 @@ class PlayerBar extends Component {
                     });
 
                     eventHandler.emitEvent(Events.songInfoUpdated, response.data["current_song"])
+                } else {
+                    eventHandler.emitEvent(Events.songInfoUpdated, null)
                 }
             })
             .catch((error) => {
@@ -108,6 +110,7 @@ class PlayerBar extends Component {
     _update_player = (playingStatusOptions) => {
         eventHandler.emitEvent(Events.updatePlayingStatus, playingStatusOptions);
         this.updateSongInfo();
+        // after this, songInfoUpdate is emitted
     };
 
     /**

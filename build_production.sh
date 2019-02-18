@@ -4,6 +4,9 @@
 # React production builder
 # ---------------
 
+# Install dependencies if needed
+npm update
+
 # Remove previous build
 rm -rf build/*
 
