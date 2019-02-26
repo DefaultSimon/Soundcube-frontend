@@ -7,30 +7,21 @@
     display: flex;
     flex-grow: 1;
     background: $background;
+
+    // Horizontal scroll should be hidden because of the expanding sidebar
+    overflow-x: hidden;
+    // Hide vertical scroll on desktops
+    @include media(">=desktop") {
+        overflow-x: hidden;
+    }
 }
 
 main {
-    // Resizes the main container to fit remaining space
-    // $appbar: 50px;
-    // $drawer: 190px;
-    //
-    // position: absolute;
-    // width: calc(100% - #{$drawer});
-    // height: calc(100% - #{$appbar});
-    //
-    // max-width: calc(100% - #{$drawer});
-    // max-height: calc(100% - #{$appbar});
-    //
-    // overflow: hidden;
-    //
-    // top: 50px;
-    // left: $drawer
-
     position: absolute;
     top: 0;
     left: 0;
 
-    width: 100%;
+    width: calc(100% - #{$drawer-closed-width});
     height: 100%;
 
     overflow: hidden;

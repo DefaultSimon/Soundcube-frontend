@@ -1,12 +1,11 @@
 .drawer {
-    $drawer-closed-width: 57px;
-    $drawer-open-width: 190px;
-
     overflow-x: hidden;
     width: $drawer-closed-width;
 
     transition: .4s $ease-out-quart;
     flex-shrink: 0;
+
+    border-right: 1px solid transparentize(lighten($secondary-color, 10), 0.5);
 
     &--paper {
         position: relative;

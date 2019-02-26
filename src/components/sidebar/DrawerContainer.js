@@ -10,7 +10,7 @@ class DrawerContainer extends Component {
         super(props);
 
         this.state = {
-            isOpen: true
+            isOpen: false
         };
 
         eventHandler.subscribeToEvent(Events.toggleDrawerState, this.toggleDrawerState)
