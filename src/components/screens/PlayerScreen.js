@@ -17,9 +17,6 @@ const styles = theme => ({
     divider: {
         height: "2px",
         width: "80%"
-    },
-    playerComponent: {
-        marginTop: "45px"
     }
 });
 
@@ -31,7 +28,7 @@ class PlayerScreen extends Component {
             <div className={`screen flex-c1 fullwidth ${isVisible ? "visible": ""}`}>
                 <Card className="screen__card flex-c1">
                     <Divider className={classes.divider} />
-                    <Player className={classes.playerComponent} />
+                    <Player />
                 </Card>
             </div>
         );

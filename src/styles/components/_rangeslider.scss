@@ -4,7 +4,10 @@
     display: block;
     position: relative;
 
+    $handle-size: 12px;
+
     &-horizontal {
+        // Horizontal height
         height: 8px;
         border-radius: 2px;
     }
@@ -16,8 +19,8 @@
         border-radius: 2px;
     }
     &__handle {
-        height: 12px;
-        width: 12px;
+        height: $handle-size;
+        width: $handle-size;
 
         border-radius: 4px;
         top: 50%;

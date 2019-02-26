@@ -37,7 +37,7 @@ class PlayerBarVolume extends Component {
         if (this.volumeSetTimeout !== null) {
             clearTimeout(this.volumeSetTimeout)
         }
-        this.volumeSetTimeout = setTimeout(() => {this.setVolume(value)}, 75);
+        this.volumeSetTimeout = setTimeout(() => {this.setVolume(value)}, 80);
     };
 
     /**

@@ -8,11 +8,17 @@
     }
     max-width: 800px;
 
+    margin-top: 40px;
+    margin-bottom: 40px;
+
     // Song title
     &__title {
         font-family: $font-family;
         font-size: 1.8rem;
         font-weight: 700;
+
+        text-align: center;
+        overflow-wrap: break-word;
 
         margin: 15px 0 30px 0;
     }
@@ -100,7 +106,8 @@
         // customized rangeslider from _rangeslider.scss
         .rangeslider {
             $rangeslider-width: 80px;
-            $rangeslider-height: 10px;
+            $rangeslider-height: 12px;
+            $handle-size: 13px;
 
             min-width: $rangeslider-width;
             z-index: 5;
@@ -118,6 +125,10 @@
                 border-radius: 3px;
 
                 z-index: 3;
+            }
+            &__handle {
+                height: $handle-size;
+                width: $handle-size;
             }
         }
     }
