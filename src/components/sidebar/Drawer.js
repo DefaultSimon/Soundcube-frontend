@@ -31,7 +31,7 @@ const styles = theme => ({
 });
 
 
-class Sidebar extends Component {
+class Drawer extends Component {
     constructor(props) {
         super(props);
 
@@ -70,7 +70,7 @@ class Sidebar extends Component {
         const {classes} = this.props;
 
         return (
-            <List component="nav" className="sidebar">
+            <List component="nav" className="drawer--list">
                 {this.state.items.map(({text, screen, icon}) => {
                     // Uppercase names are converted to components
                     const Icon = icon;
@@ -93,4 +93,4 @@ class Sidebar extends Component {
     }
 }
 
-export default withStyles(styles)(Sidebar);
+export default withStyles(styles)(Drawer);

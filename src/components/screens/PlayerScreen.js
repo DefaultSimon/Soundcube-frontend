@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import Player from './Player/Player';
 // Material-UI
 import {withStyles} from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import Card from "@material-ui/core/Card";
 import Divider from "@material-ui/core/Divider";
 
@@ -29,8 +28,8 @@ class PlayerScreen extends Component {
         const {isVisible, classes} = this.props;
 
         return (
-            <div className={`screen fullwidth ${isVisible ? "visible": ""}`}>
-                <Card className="screen__card">
+            <div className={`screen flex-c1 fullwidth ${isVisible ? "visible": ""}`}>
+                <Card className="screen__card flex-c1">
                     <Divider className={classes.divider} />
                     <Player className={classes.playerComponent} />
                 </Card>

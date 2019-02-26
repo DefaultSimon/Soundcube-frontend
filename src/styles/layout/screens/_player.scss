@@ -1,8 +1,14 @@
-// Player screen
+//////////////////
+// Player Screen
+/////////////////
 .player {
     width: 80%;
-    max-width: 600px;
+    @include media("<=phone") {
+        width: 98%;
+    }
+    max-width: 800px;
 
+    // Song title
     &__title {
         font-family: $font-family;
         font-size: 1.8rem;
@@ -11,11 +17,12 @@
         margin: 15px 0 30px 0;
     }
 
+    // Song track progress bar
     &__progress {
         position: relative;
-
         width: 90%;
 
+        // flex alignment
         display: flex;
         justify-content: center;
         flex-direction: column;
@@ -23,6 +30,7 @@
 
         margin: 12px 0;
 
+        // Progress bar
         .track {
             cursor: pointer;
             transform: translateY(0);
@@ -63,6 +71,7 @@
             }
         }
 
+        // Timestamps
         .time {
             margin: 8px 2px;
             font-family: $font-family;
@@ -75,11 +84,12 @@
 
     }
 
+    // Buttons, volume bar, ...
     &__control {
+        // flex alignment
         display: flex;
         justify-content: center;
         align-items: center;
-
         flex-direction: row;
         flex-wrap: wrap;
 
@@ -87,20 +97,23 @@
             position: relative;
         }
 
+        // customized rangeslider from _rangeslider.scss
         .rangeslider {
-            $width: 80px;
+            $rangeslider-width: 80px;
+            $rangeslider-height: 10px;
 
-            min-width: $width;
-
+            min-width: $rangeslider-width;
             z-index: 5;
+
+            height: $rangeslider-height;
 
             // Custom stuff
             &-background {
                 position: absolute;
                 top: 0;
 
-                width: $width;
-                height: 8px;
+                width: $rangeslider-width;
+                height: $rangeslider-height;
                 background: darken($background, 15%);
                 border-radius: 3px;
 

@@ -1,11 +1,15 @@
+//////////////////////
+// Screen Container
+//////////////////////
 .screens {
     background: $background;
     width: 100%;
-    margin-top: 48px;
+    // Takes the top Material-UI's AppBar into consideration
+    margin-top: $appbar-height;
 
     // Container and screens should take up the whole screen on phones
     @include media("<=phone") {
-        height: 100%;
+        height: calc(100% - #{$appbar-height});
 
         .screen {
             height: 100%;
@@ -15,16 +19,21 @@
     .screen {
         // hidden by default
         visibility: hidden;
-
         display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
 
-        @include media(">phone") {
-            padding: 30px;
+        &.visible {
+            display: flex;
+            visibility: visible;
         }
 
+        // On mobile only have top padding
+        padding: 30px;
+        @include media("<=phone") {
+            justify-content: flex-start;
+            padding: 15px 0 0 0;
+        }
+
+        // Customization of Material-UI's Card element
         &__card {
             width: 100%;
             @include media("<=phone") {
@@ -32,16 +41,8 @@
                 justify-content: flex-start;
             }
 
+            // flex alignment
             display: flex;
-            flex-direction: column;
-
-            justify-content: center;
-            align-items: center;
-        }
-
-        &.visible {
-            display: flex;
-            visibility: visible;
         }
     }
 }

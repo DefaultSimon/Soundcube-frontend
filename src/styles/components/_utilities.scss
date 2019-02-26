@@ -1,7 +1,9 @@
+// Makes the element 100% wide
 .fullwidth {
     width: 100%;
 }
 
+// display: flex shortcuts
 .flex {
     display: flex;
 
@@ -15,4 +17,11 @@
     &--middle {
         align-items: center;
     }
+}
+
+// Common flex shortcut
+.flex-c1 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

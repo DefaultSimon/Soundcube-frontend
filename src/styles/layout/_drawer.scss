@@ -1,22 +1,36 @@
+// The left drawer - for quickly switching between screens
 .drawer {
+    // The drawer can be open/closed, we shouldn't show any other content
     overflow-x: hidden;
+
+    // By default closed
     width: $drawer-closed-width;
-
-    transition: .4s $ease-out-quart;
-    flex-shrink: 0;
-
-    border-right: 1px solid transparentize(lighten($secondary-color, 10), 0.5);
-
-    &--paper {
-        position: relative;
-        top: 42px;
-    }
-
     &.open {
         width: $drawer-open-width;
     }
 
-    // This uses translateX to move the screen container when the sidebar is open
+    transition: .4s $ease-out-quart;
+    flex-shrink: 0;
+
+    $drawer-border-color: lighten($secondary-color, 10);
+
+    border-right: 1px solid transparentize($drawer-border-color, 0.5);
+
+    // Customization of Material-UI's Paper element
+    &--paper {
+        position: relative;
+        top: 42px;
+        width: 100%;
+    }
+
+    // contains links to screens
+    &--list {
+        .link.active {
+            background: transparentize($drawer-border-color, 0.75);
+        }
+    }
+
+    // This uses translateX to move the screen container when the sidebar is open (but overflow-x is hidden)
     & + main {
         transform: translateX($drawer-closed-width);
         transition: .4s $ease-out-quart;

@@ -1,3 +1,4 @@
+// div.body is the immediate child of the root React element
 .body {
     height: 100vh;
     max-height: 100vh;
@@ -16,16 +17,20 @@
     }
 }
 
+// Under div.body, there are three elements: the header, the sidebar and
+// main - contains the screen container
 main {
     position: absolute;
     top: 0;
     left: 0;
 
+    // Takes up the remaining space, shifts to the right if the sidebar is open
     width: calc(100% - #{$drawer-closed-width});
     height: 100%;
 
     overflow: hidden;
 
+    // Disable padding on mobile phones to better use space
     @include media("<=phone") {
         .screens {
             .screen {

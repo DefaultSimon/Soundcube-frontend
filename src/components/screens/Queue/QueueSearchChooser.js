@@ -68,11 +68,17 @@ class QueueSearchChooser extends Component {
     handleSearchChange = (value) => {
         clearTimeout(this.searchTimeout);
 
-        this.searchTimeout = setTimeout(() => {
-            log.debug("Searching...");
-            this.searchYoutube(value);
+        if (value === "") {
+            log.debug("Input is empty, clearing immediately");
+            this.setState({searchItems: []})
+        } else {
 
-        }, 450)
+            this.searchTimeout = setTimeout(() => {
+                log.debug("Searching...");
+                this.searchYoutube(value);
+
+            }, 450)
+        }
     };
 
     /**

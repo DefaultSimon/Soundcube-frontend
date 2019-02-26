@@ -1,21 +1,54 @@
+//////////////////
+// Player Screen
+/////////////////
 .queue {
     width: 100%;
 
+    $button-width: 24px;
+    $button-margin-right: 4px;
+    $field-margin: 15px;
+
+    // Search bar
     &__add {
         display: flex;
         justify-content: center;
         align-items: center;
 
         width: 100%;
+
+        // Text field
+        .field {
+            margin: $field-margin;
+            min-width: 350px;
+            width: 60%;
+
+            // duplicated on the preview container
+            @include media("<=phone") {
+                min-width: calc(100% - #{$button-width} - 2 * #{$field-margin} - #{$button-margin-right});
+            }
+        }
+
+        // Search clear button
+        .button--clear {
+            cursor: pointer;
+            margin-right: $button-margin-right;
+            width: $button-width;
+        }
     }
 
+    // Search chooser
     &__preview {
         width: 100%;
         position: relative;
 
+        // Preview table container
         .tablecontainer {
             // Makes sure the table is centered with the text box
             width: 60%;
+            @include media("<=phone") {
+                width: calc(100% - #{$button-width} - 2 * #{$field-margin} - #{$button-margin-right});
+            }
+
             pointer-events: none;
 
             position: absolute;
@@ -26,17 +59,42 @@
             display: flex;
         }
 
+        // The actual table element containing search results
         table {
-            pointer-events: all;
             position: relative;
-            // 12px is half of the clear icon, this adjusts the table to be flush with the text input
-            left: calc(-50% - 12px);
 
+            pointer-events: all;
+            user-select: none;
+
+            // half of the clear icon + margin, this adjusts the table to be flush with the text input
+            left: calc(-50% - #{$button-width} / 2 - #{$button-margin-right} / 2);
+
+            // Color customization (mostly table borders)
             background: darken($background, 2%);
+            $border-color: lighten($secondary-color, 10);
+
+            tr {
+                border-left-color: $border-color;
+                border-right-color: $border-color;
+
+                td, th {
+                    border-bottom: none;
+                }
+            }
+
+            thead {
+                border-bottom: 1px solid transparentize(lighten($dark-color, 10), 0.45);
+            }
+            tbody tr:not(:last-of-type) {
+                border-bottom: 1px solid transparentize(lighten($dark-color, 15), 0.8)
+            }
         }
 
+        // An overlay which is applied over every search result
         .overlay {
             display: none;
+            position: absolute;
+
             opacity: 0;
             pointer-events: all;
 
@@ -44,8 +102,9 @@
                 display: flex;
                 opacity: 1;
             }
+            justify-content: center;
+            align-items: center;
 
-            position: absolute;
             // Fixed table row height by Material-UI
             height: 48px;
             width: 100%;
@@ -54,15 +113,10 @@
 
             transition: .3s ease-in-out;
             background: transparentize($secondary-color, 0.4);
-
-            //display: flex;
-            justify-content: center;
-            align-items: center;
-
         }
     }
 
     &__button {
-        position: relative
+        position: relative;
     }
 }

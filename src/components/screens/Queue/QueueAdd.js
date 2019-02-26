@@ -3,23 +3,11 @@ import React, {Component} from 'react';
 import eventHandler, {Events} from "../../../core/EventHandler";
 
 // Material-ui
-import {withStyles} from "@material-ui/core";
 import TextField from '@material-ui/core/TextField';
 // Material icons
 import {Close} from "mdi-material-ui";
 
 import QueueSearchChooser from './QueueSearchChooser';
-
-const styles = theme => ({
-    textFieldSpacing: {
-        margin: 15,
-        minWidth: 350,
-        width: "60%"
-    },
-    clearButton: {
-        cursor: "pointer"
-    }
-});
 
 class QueueAdd extends Component {
     constructor(props) {
@@ -44,8 +32,6 @@ class QueueAdd extends Component {
     };
 
     render() {
-        const {classes} = this.props;
-
         return (
             <div>
                 <div className="queue__add">
@@ -56,9 +42,9 @@ class QueueAdd extends Component {
                         margin="normal"
                         variant="filled"
                         onChange={this.onInputUpdate}
-                        className={classes.textFieldSpacing}/>
+                        className="field"/>
                     {/* the Close icon clears the input */}
-                    <Close className={classes.clearButton} onClick={() => this.onInputUpdate({target:{value:""}})}/>
+                    <Close className="button--clear" onClick={() => this.onInputUpdate({target:{value:""}})}/>
                 </div>
                 <div className="queue__preview">
                     <QueueSearchChooser />
@@ -68,4 +54,4 @@ class QueueAdd extends Component {
     }
 }
 
-export default withStyles(styles)(QueueAdd);
+export default QueueAdd;

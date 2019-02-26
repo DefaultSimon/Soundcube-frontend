@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Sidebar from "./Sidebar";
+import DrawerEl from "./Drawer";
 
 import eventHandler, {Events} from "../../core/EventHandler";
 
@@ -39,7 +39,7 @@ class DrawerContainer extends Component {
                     className:"drawer--paper"
                 }}
                 open={isOpen}>
-                <Sidebar/>
+                <DrawerEl/>
             </Drawer>
         );
     }
