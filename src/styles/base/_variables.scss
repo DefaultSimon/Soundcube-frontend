@@ -5,6 +5,7 @@
 
 /* Breakpoints */
 $breakpoints: im-to-em((
+    small-phone: 420px,
     phone: 768px,
     desktop: 1024px
 ));
@@ -48,3 +49,6 @@ $drawer-closed-width: 57px;
 $drawer-open-width: 190px;
 
 $appbar-height: 48px;
+
+$rangeslider-background: transparentize(lighten($secondary-color, 15%), 0.1);
+$rangeslider-handle-color: darken($secondary-color, 15%);

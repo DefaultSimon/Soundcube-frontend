@@ -194,6 +194,7 @@ class PlayerBar extends Component {
                         );
                     })
                 }
+                <span className="next-line"/>
                 <PlayerBarVolume/>
             </div>
         );

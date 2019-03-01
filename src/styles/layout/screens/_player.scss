@@ -4,7 +4,7 @@
 .player {
     width: 80%;
     @include media("<=phone") {
-        width: 98%;
+        width: 100%;
     }
     max-width: 800px;
 
@@ -21,6 +21,7 @@
         overflow-wrap: break-word;
 
         margin: 15px 0 30px 0;
+        padding: 5px 0;
     }
 
     // Song track progress bar
@@ -34,7 +35,10 @@
         flex-direction: column;
         align-items: center;
 
-        margin: 12px 0;
+        margin: 20px 0;
+
+        $scrubber-background: transparentize($dark-color, 0.85);
+        $scrubber-background-active: transparentize($dark-color, 0.75);
 
         // Progress bar
         .track {
@@ -74,6 +78,18 @@
                 #track_full {
                     background: darken(#fff, 20%);
                 }
+
+                // Scrubber follows the expansion of the track when hovered on
+                &+ .time .scrubber {
+                    bottom: calc(100% + 16px);
+
+                    #text {
+                        background: $scrubber-background-active;
+                    }
+                    #triangle {
+                        border-color: $scrubber-background-active transparent transparent transparent;
+                    }
+                }
             }
         }
 
@@ -86,6 +102,48 @@
             display: flex;
             justify-content: space-between;
             flex-direction: row;
+            position: relative;
+
+            // A timestamp that follows your mouse
+            .scrubber {
+                position: absolute;
+                left: 50%;
+                pointer-events: none;
+
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                opacity: 0;
+                &.scrubbing {
+                    opacity: 1;
+                }
+
+                bottom: calc(100% + 14px);
+                transition: bottom .2s ease-in-out,
+                            opacity .215s ease-in;
+
+                #text {
+                    padding: 3px 5px;
+                    border-top-left-radius: 4px;
+                    border-top-right-radius: 4px;
+
+                    background: $scrubber-background;
+                }
+
+                #triangle {
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 10px 10px 0 10px;
+                    border-color: $scrubber-background transparent transparent transparent;
+                }
+
+                #text, #triangle {
+                    transition: background-color .2s ease-in-out,
+                                border-top-color .2s ease-in-out;
+                }
+            }
         }
 
     }
@@ -99,36 +157,90 @@
         flex-direction: row;
         flex-wrap: wrap;
 
-        .slider-container {
-            position: relative;
+        @include media("<=phone") {
+            width: 100%;
         }
 
-        // customized rangeslider from _rangeslider.scss
-        .rangeslider {
-            $rangeslider-width: 80px;
-            $rangeslider-height: 12px;
-            $handle-size: 13px;
+        $rangeslider-width: 200px;
+        $rangeslider-width-mobile: 75%;
+        $rangeslider-width-mobile-small: 90%;
+
+        button {
+            @include media("<=phone") {
+                margin-left: 6px;
+                margin-right: 6px;
+
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+            @include media("<=small-phone") {
+                margin-left: 2px;
+                margin-right: 2px;
+
+                padding-left: 6px;
+                padding-right: 6px;
+            }
+        }
+
+        // This is a styling element that forces the following items into a next line
+        .next-line {
+            width: 100%;
+        }
+
+        .volume {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            &-icon {
+                margin: 2px 8px;
+
+                path {
+                    fill: $rangeslider-handle-color;
+                }
+            }
+        }
+
+        // This contains the volume slider
+        .slider-container {
+            position: relative;
+            break-before: page;
 
             min-width: $rangeslider-width;
-            z-index: 5;
-
-            height: $rangeslider-height;
-
-            // Custom stuff
-            &-background {
-                position: absolute;
-                top: 0;
-
-                width: $rangeslider-width;
-                height: $rangeslider-height;
-                background: darken($background, 15%);
-                border-radius: 3px;
-
-                z-index: 3;
+            @include media("<=phone") {
+                min-width: $rangeslider-width-mobile;
             }
-            &__handle {
-                height: $handle-size;
-                width: $handle-size;
+            @include media("<=small-phone") {
+                min-width: $rangeslider-width-mobile-small;
+            }
+
+            // customized rangeslider from _rangeslider.scss
+            .rangeslider {
+                $rangeslider-height: 12px;
+                $handle-size: 13px;
+
+                width: 100%;
+                height: $rangeslider-height;
+
+                z-index: 5;
+
+                // Custom stuff
+                &-background {
+                    position: absolute;
+                    top: 0;
+
+                    width: 100%;
+                    height: $rangeslider-height;
+                    background: darken($background, 15%);
+                    border-radius: 3px;
+
+                    z-index: 3;
+                }
+
+                &__handle {
+                    height: $handle-size;
+                    width: $handle-size;
+                }
             }
         }
     }
