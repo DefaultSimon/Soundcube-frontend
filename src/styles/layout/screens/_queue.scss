@@ -113,6 +113,81 @@
 
             transition: .3s ease-in-out;
             background: transparentize($secondary-color, 0.4);
+
+            .queue-button {
+                width: 42%;
+                height: 100%;
+                pointer-events: all;
+                padding: 3px 10px;
+
+                overflow: hidden;
+
+                color: white;
+                background: transparentize($secondary-color, 0.45);
+                &:hover {
+                    background: transparentize($secondary-color, 0.2);
+                }
+                transition: background-color .2s ease-in-out,
+                            width .5s $ease-out-quint,
+                            border-color .3s $ease-out-quint;
+
+                border-color: white;
+                border-top: none;
+                border-bottom: none;
+                border-radius: 0;
+                border-width: 3px;
+
+                .panel {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+
+                    &:nth-of-type(2) {
+                        top: 100%;
+                    }
+
+                    transform: translateY(0);
+                    transition: .75s $ease-out-quint;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    .progress {
+                        position: absolute;
+                        top: calc(50% - 12px);
+                        left: calc(50% - 12px);
+                        color: white;
+                    }
+
+                    .icon {
+                        margin-right: 8px;
+                    }
+                }
+            }
+
+            // The loading spinner is hidden until loading starts
+            &.loading .queue-button .panel {
+                transform: translateY(-100%);
+            }
+            &.loaded {
+                @keyframes fadeOut {
+                    0% { opacity: 1 }
+                    100% { opacity: 0 }
+                }
+
+                animation-name: fadeOut;
+                animation-duration: .3s;
+                animation-timing-function: $ease-out-quad;
+                animation-delay: .2s;
+                animation-fill-mode: forwards;
+
+                .queue-button {
+                    width: 110%;
+                    border-color: transparent;
+                }
+            }
+
         }
     }
 

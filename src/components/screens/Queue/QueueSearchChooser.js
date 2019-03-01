@@ -77,7 +77,7 @@ class QueueSearchChooser extends Component {
                 log.debug("Searching...");
                 this.searchYoutube(value);
 
-            }, 450)
+            }, 400)
         }
     };
 
@@ -93,8 +93,8 @@ class QueueSearchChooser extends Component {
 
         youtubeSearch(searchParameter, this.youtubeOpts)
             .then(data => {
-                log.debug(`Fetched search results, got: ${JSON.stringify(data.results.map(item => (item.title)))}`);
-
+                //log.debug(`Fetched search results, got: ${JSON.stringify(data.results.map(item => (item.title)))}`);
+                log.debug("Fetched YouTube search results");
                 this.setState({searchItems: data.results})
             })
             .catch(err => {

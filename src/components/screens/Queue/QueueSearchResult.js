@@ -37,13 +37,17 @@ class QueueSearchResult extends Component {
         }
     };
 
+    closeSelf = () => {
+        this.setState({overlayIsOpen: false})
+    };
+
     render() {
         const {classes, item} = this.props;
 
         return (
             <TableRow className={classes.tableRow} onClick={this.handleElementClick}>
                 <TableCell className={classes.tableItem}>{item.title}</TableCell>
-                <QueueSearchElementOverlay itemInfo={item} isVisible={this.state.overlayIsOpen}/>
+                <QueueSearchElementOverlay itemInfo={item} isVisible={this.state.overlayIsOpen} closeSelf={this.closeSelf}/>
             </TableRow>
         );
     }

@@ -161,7 +161,7 @@
             width: 100%;
         }
 
-        $rangeslider-width: 200px;
+        $rangeslider-width: 250px;
         $rangeslider-width-mobile: 75%;
         $rangeslider-width-mobile-small: 90%;
 
@@ -192,6 +192,14 @@
             justify-content: center;
             align-items: center;
 
+            min-width: $rangeslider-width;
+            @include media("<=phone") {
+                min-width: $rangeslider-width-mobile;
+            }
+            @include media("<=small-phone") {
+                min-width: $rangeslider-width-mobile-small;
+            }
+
             &-icon {
                 margin: 2px 8px;
 
@@ -205,14 +213,7 @@
         .slider-container {
             position: relative;
             break-before: page;
-
-            min-width: $rangeslider-width;
-            @include media("<=phone") {
-                min-width: $rangeslider-width-mobile;
-            }
-            @include media("<=small-phone") {
-                min-width: $rangeslider-width-mobile-small;
-            }
+            width: 100%;
 
             // customized rangeslider from _rangeslider.scss
             .rangeslider {

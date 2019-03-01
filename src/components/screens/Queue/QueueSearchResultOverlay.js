@@ -22,16 +22,9 @@ const styles = theme => ({
         borderColor: "white",
         pointerEvents: "all"
     },
-    buttonIcon: {
-        marginRight: "8px"
-    },
-
-    loadingProgress: {
-        position: "absolute",
-        // 12px is half of the width/height
-        top: "calc(50% - 12px)",
-        left: "calc(50% - 12px)",
-        color: theme.palette.primary.light
+    snackbarContent: {
+        borderBottomLeftRadius: "0",
+        borderBottomRightRadius: "0"
     },
     snackbarText: {
         display: "flex",
@@ -46,7 +39,11 @@ class QueueSearchResultOverlay extends Component {
         this.state = {
             snackbarIsOpen: false,
             snackbarMessage: null,
-            videoId: props.itemInfo.id
+
+            videoId: props.itemInfo.id,
+
+            isLoading: false,
+            isLoaded: false
         };
     }
 
@@ -55,26 +52,25 @@ class QueueSearchResultOverlay extends Component {
      * @param {string} message - Message to show
      */
     showSnackbar = (message) => {
-        this.setState({isSnackbarOpen: true, snackbarMessage: message})
+        this.setState({snackbarIsOpen: true, snackbarMessage: message})
     };
     /**
      * Closes the snackbar (if open)
      */
     closeSnackbar = () => {
-        this.setState({isSnackbarOpen: false, snackbarMessage: null})
+        this.setState({snackbarIsOpen: false, snackbarMessage: null})
     };
 
     /**
      * Queues a song and requests a queue update
      */
     queueSong = () => {
-        this.setState({isLoading: true});
+        this.setState({isLoading: true, isLoaded: false});
 
         const req = api.player_quickQueue(this.state.videoId);
         const proc = req.then((response) => {
             if (response.status === 200) {
                 eventHandler.emitEvent(Events.updateQueue);
-                return "Song queued!"
             }
         })
             .catch((err) => {
@@ -87,30 +83,44 @@ class QueueSearchResultOverlay extends Component {
 
         Promise.all([req, proc])
             .then(([resp, message]) => {
-                this.showSnackbar(message);
+                this.showSnackbar("Song queued!");
             })
             .catch((err) => {
-                this.showSnackbar("Something went wrong...");
+                this.showSnackbar("Something went wrong while queueing...");
                 log.warn(`Something went wrong while quickQueueing: ${err}`)
 
             })
             .finally(() => {
-                this.setState({isLoading: false})
+                this.setState({isLoading: false, isLoaded: true});
+                // The closing animation takes .5s
+                setTimeout(() => {
+                    this.props.closeSelf();
+                    this.setState({isLoaded: false})
+                }, 550)
             })
     };
 
     render() {
-        const {isVisible, isLoading, classes} = this.props;
-        const {snackbarIsOpen, snackbarMessage} = this.state;
+        const {isVisible, classes} = this.props;
+        const {snackbarIsOpen, snackbarMessage, isLoading, isLoaded} = this.state;
+
+        const overlayClasses = ["overlay",
+                                isVisible  ? "visible": "",
+                                isLoading ? "loading" : "",
+                                isLoaded ? "loaded": ""].join(" ");
 
         return (
-            <td className={`overlay ${isVisible ? 'visible' : ''}`}>
-                <Button className={classes.button} variant="outlined" onClick={this.queueSong}>
-                    <ShapePolygonPlus className={classes.buttonIcon}/>
-                    <span>Add song to queue</span>
+            <td className={overlayClasses}>
+                <Button className="queue-button" variant="outlined" onClick={this.queueSong}>
+                    <span className="panel">
+                        <ShapePolygonPlus className="icon"/>
+                        <span>Add song to queue</span>
+                    </span>
+                    <span className="panel">
+                        <CircularProgress size={24} className="progress"/>
+                    </span>
                 </Button>
 
-                {isLoading && <CircularProgress size={24} className={classes.loadingProgress}/>}
                 <Snackbar
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -120,6 +130,7 @@ class QueueSearchResultOverlay extends Component {
                     autoHideDuration={4000}
                     onClose={this.closeSnackbar}>
                     <SnackbarContent
+                        className={classes.snackbarContent}
                         message={<span className={classes.snackbarMessage}>{snackbarMessage}</span>}
                         action={[
                             <LibraryPlus key="lib"/>
