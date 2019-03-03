@@ -161,24 +161,21 @@
             width: 100%;
         }
 
-        $rangeslider-width: 250px;
+        $rangeslider-width: 300px;
         $rangeslider-width-mobile: 75%;
         $rangeslider-width-mobile-small: 90%;
 
         button {
-            @include media("<=phone") {
-                margin-left: 6px;
-                margin-right: 6px;
+            margin: 2px 8px;
+            padding: 10px;
 
-                padding-left: 8px;
-                padding-right: 8px;
+            @include media("<=phone") {
+                margin: 2px 6px;
+                padding: 8px;
             }
             @include media("<=small-phone") {
-                margin-left: 2px;
-                margin-right: 2px;
-
-                padding-left: 6px;
-                padding-right: 6px;
+                margin: 2px 2px;
+                padding: 6px;
             }
         }
 
@@ -241,6 +238,10 @@
                 &__handle {
                     height: $handle-size;
                     width: $handle-size;
+
+                    &:focus {
+                        outline-color: $secondary-color;
+                    }
                 }
             }
         }

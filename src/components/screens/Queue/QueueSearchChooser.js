@@ -7,7 +7,6 @@ import eventHandler, {Events} from "../../../core/EventHandler";
 import youtubeSearch from 'youtube-search';
 
 // Material-UI
-import {withStyles} from "@material-ui/core";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,22 +16,6 @@ import TableRow from '@material-ui/core/TableRow';
 import QueueSearchElement from './QueueSearchResult';
 
 const log = new Logger("QueueSearchChooser");
-
-const styles = theme => ({
-    table: {
-        position: "absolute",
-        padding: "6px",
-        border: `1px solid ${theme.palette.primary.main}`,
-        background: theme.palette.background.paper
-    },
-
-    tableHeadRow: {
-        height: "35px"
-    },
-    tableHeadCell: {
-        padding: "2px 15px 2px 15px"
-    }
-});
 
 class QueueSearchChooser extends Component {
     constructor(props) {
@@ -95,7 +78,8 @@ class QueueSearchChooser extends Component {
             .then(data => {
                 //log.debug(`Fetched search results, got: ${JSON.stringify(data.results.map(item => (item.title)))}`);
                 log.debug("Fetched YouTube search results");
-                this.setState({searchItems: data.results})
+                this.setState({searchItems: data.results});
+                console.log(data);
             })
             .catch(err => {
                 log.warn(`Something went wrong while fetching YouTube videos... ${err}`);
@@ -103,16 +87,16 @@ class QueueSearchChooser extends Component {
     };
 
     render() {
-        const {classes} = this.props;
         const hasElements = this.state.searchItems.length !== 0;
 
         if (hasElements) {
             return (
                 <div className="tablecontainer">
-                    <Table className={classes.table}>
+                    <Table>
                         <TableHead>
-                            <TableRow className={classes.tableHeadRow}>
-                                <TableCell className={classes.tableHeadCell}>Title</TableCell>
+                            <TableRow>
+                                <TableCell>Thumbnail</TableCell>
+                                <TableCell>Title</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -134,4 +118,4 @@ class QueueSearchChooser extends Component {
     }
 }
 
-export default withStyles(styles)(QueueSearchChooser);
+export default QueueSearchChooser;

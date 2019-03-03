@@ -6,7 +6,9 @@ import eventHandler, {Events} from '../core/EventHandler';
 import globalStore from '../core/GlobalStore';
 import Logger from '../core/Logger';
 import {makePromiseRetryable} from "../core/Utilities";
-// Children
+// Components
+import DrawerContainer from "./sidebar/DrawerContainer";
+import GlobalSnackbar from "./common/GlobalSnackbar";
 import ScreenContainer from './ScreenContainer';
 // Material-UI
 import {createMuiTheme, withStyles} from "@material-ui/core/styles";
@@ -18,7 +20,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from "@material-ui/core/es/Toolbar/Toolbar";
 import Typography from "@material-ui/core/es/Typography/Typography";
-import DrawerContainer from "./sidebar/DrawerContainer";
+
 
 // Utilities
 const log = new Logger("App"),
@@ -231,6 +233,9 @@ class App extends Component {
                 <main>
                     <ScreenContainer/>
                 </main>
+
+                {/* The one and only snackbar */}
+                <GlobalSnackbar/>
             </div>
         );
     }

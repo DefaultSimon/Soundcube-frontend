@@ -6,19 +6,12 @@ import Logger from "../../../core/Logger";
 
 // Material-UI
 import IconButton from "@material-ui/core/IconButton";
-import {withStyles} from "@material-ui/core/styles";
 // Material Icons
 import {Pause, Play, SkipNext, SkipPrevious, Stop} from "mdi-material-ui";
 
 import PlayerBarVolume from "./PlayerBarVolume";
 
 const log = new Logger("PlayerBar");
-
-const styles = theme => ({
-    buttonMargins: {
-        margin: "2px 8px;"
-    }
-});
 
 class PlayerBar extends Component {
     constructor(props) {
@@ -173,8 +166,6 @@ class PlayerBar extends Component {
     };
 
     render() {
-        const {classes} = this.props;
-
         return (
             <div className="player__control">
                 {
@@ -184,7 +175,6 @@ class PlayerBar extends Component {
 
                         return (
                             <IconButton
-                                className={classes.buttonMargins}
                                 key={name}
                                 color="secondary"
                                 aria-label={name}
@@ -201,4 +191,4 @@ class PlayerBar extends Component {
     }
 }
 
-export default withStyles(styles)(PlayerBar);
+export default PlayerBar;

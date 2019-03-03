@@ -13,11 +13,13 @@ $breakpoints: im-to-em((
 /* Colors */
 
 $background: white;
-$primary-color: #f4511e;
+$primary-color: #f4511E;
 $secondary-color: #5b6abf;
 $accent-color: #cdcdcd;
 $error-color: #b91400;
 $dark-color: #212121;
+
+$secondary-light-button: #f50057;
 
 // The :export statement makes these variables importable in js
 //noinspection ALL
@@ -50,5 +52,7 @@ $drawer-open-width: 190px;
 
 $appbar-height: 48px;
 
-$rangeslider-background: transparentize(lighten($secondary-color, 15%), 0.1);
-$rangeslider-handle-color: darken($secondary-color, 15%);
+
+$rangeslider-base: adjust_color($secondary-light-button, $saturation: -25);
+$rangeslider-background: transparentize(lighten($rangeslider-base, 3), 0.15);
+$rangeslider-handle-color: darken($rangeslider-base, 9);

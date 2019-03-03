@@ -5,6 +5,10 @@ import {createRandomId} from "./Utilities";
 const log = new Logger("EventHandler");
 
 const Events = {
+    ////////////////////
+    // 1. "Action-like" events
+    ////////////////////
+
     // Request that ScreenContainer moves to the provided screen
     // args: screenName
     moveToScreen: "moveToScreen",
@@ -23,17 +27,27 @@ const Events = {
     // Toggle drawer open/close
     // args: none
     toggleDrawerState: "toggleDrawerState",
+    // Shows the global snackbar
+    // args: message, autoHideDurationMs (default 5000)
+    showSnackbar: "showSnackbar",
+    // Closes the global snackbar
+    // args: none
+    closeSnackbar: "closeSnackbar",
+
+
+    ////////////////////
+    // 2. Actual events
+    ////////////////////
+
+    // Emitted when the YouTube API key is fetched
+    // args: string
+    youtubeApiKeyFetched: "youtubeApiKeyFetched",
     // Drawer was opened
     // args: none
     drawerWasOpened: "drawerWasOpened",
     // Drawer was closed
-    drawerWasClosed: "drawerWasClosed",
     // args: none
-
-    // (mostly) one-time triggers
-    // Emitted when the YouTube API key is fetched
-    // args: string
-    youtubeApiKeyFetched: "youtubeApiKeyFetched",
+    drawerWasClosed: "drawerWasClosed",
     // Emitted when the queueing text field is updated
     // args: string
     searchTextUpdated: "searchTextUpdated",
@@ -46,7 +60,6 @@ const Events = {
     // Emitted when the playing status (progress bar) is updated
     // args: none
     playingStatusUpdated: "playingStatusUpdated",
-
 
 };
 

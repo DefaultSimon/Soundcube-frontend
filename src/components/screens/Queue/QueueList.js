@@ -25,7 +25,7 @@ const styles = theme => ({
         whiteSpace: "nowrap"
     },
     cellStyle: {
-        padding: "4px 15px 4px 20px"
+        padding: "4px 15px 4px 10px"
     },
     iconCellStyle: {
         padding: "5px"
@@ -36,6 +36,12 @@ const styles = theme => ({
     },
     removeButton: {
         cursor: "pointer"
+    },
+    thumbnail: {
+        height: "auto",
+        width: "100%",
+        maxWidth: "100px",
+        maxHeight: "100px"
     }
 });
 
@@ -45,13 +51,13 @@ const QueueDragHandle = withStyles(styles)(SortableHandle(({ classes }) => (
 )));
 
 // An individual table element - a song
-const QueueItem = withStyles(styles)(SortableElement(({classes, indexNum, value: {video_id, title, length, unique_id}, removeItemCallback}) => (
+const QueueItem = withStyles(styles)(SortableElement(({classes, indexNum, value: {thumbnail, title, length, unique_id}, removeItemCallback}) => (
     <TableRow key={unique_id}>
+        <TableCell classes={{root: classes.cellStyle}}><img className={classes.thumbnail} src={thumbnail} alt={`${title}-thumbnail`}/></TableCell>
         <TableCell classes={{root: classes.cellStyle}}>{title}</TableCell>
         <TableCell classes={{root: [classes.cellStyle, classes.noBreak].join(" ")}}>
             {resolveTime(length)}
         </TableCell>
-        <TableCell classes={{root: classes.cellStyle}}>{video_id}</TableCell>
         <TableCell classes={{root: classes.iconCellStyle}}>
             <QueueDragHandle />
         </TableCell>
@@ -68,9 +74,9 @@ const QueueItemContainer = withStyles(styles)(SortableContainer(({ classes, item
     <Table>
         <TableHead>
             <TableRow>
+                <TableCell classes={{root: classes.cellStyle}}>Thumbnail</TableCell>
                 <TableCell classes={{root: classes.cellStyle}}>Title</TableCell>
                 <TableCell classes={{root: classes.cellStyle}}>Length</TableCell>
-                <TableCell classes={{root: classes.cellStyle}}>Video ID</TableCell>
                 <TableCell classes={{root: classes.iconCellStyle}}/>
                 <TableCell classes={{root: classes.iconCellStyle}}/>
             </TableRow>
@@ -158,7 +164,7 @@ class QueueList extends Component {
      * @param {int} newIndex - new position
      */
     onSortEnd = ({oldIndex, newIndex}) => {
-        log.debug(`User ended sorting: ${oldIndex} to ${newIndex}`);
+        log.debug(`User stopped sorting: ${oldIndex} to ${newIndex}`);
 
         // Update queue on screen, then send move request
         this.setState({queue: arrayMove(this.state.queue, oldIndex, newIndex)});

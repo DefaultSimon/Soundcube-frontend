@@ -57,138 +57,217 @@
             top: -16px;
 
             display: flex;
-        }
 
-        // The actual table element containing search results
-        table {
-            position: relative;
+            $row-height: 76px;
+            $row-height-mobile: 61px;
 
-            pointer-events: all;
-            user-select: none;
 
-            // half of the clear icon + margin, this adjusts the table to be flush with the text input
-            left: calc(-50% - #{$button-width} / 2 - #{$button-margin-right} / 2);
+            // The actual table element containing search results
+            table {
+                position: relative;
+                padding: 6px;
 
-            // Color customization (mostly table borders)
-            background: darken($background, 2%);
-            $border-color: lighten($secondary-color, 10);
-
-            tr {
-                border-left-color: $border-color;
-                border-right-color: $border-color;
-
-                td, th {
-                    border-bottom: none;
-                }
-            }
-
-            thead {
-                border-bottom: 1px solid transparentize(lighten($dark-color, 10), 0.45);
-            }
-            tbody tr:not(:last-of-type) {
-                border-bottom: 1px solid transparentize(lighten($dark-color, 15), 0.8)
-            }
-        }
-
-        // An overlay which is applied over every search result
-        .overlay {
-            display: none;
-            position: absolute;
-
-            opacity: 0;
-            pointer-events: all;
-
-            &.visible {
-                display: flex;
-                opacity: 1;
-            }
-            justify-content: center;
-            align-items: center;
-
-            // Fixed table row height by Material-UI
-            height: 48px;
-            width: 100%;
-            left: 0;
-            cursor: pointer;
-
-            transition: .3s ease-in-out;
-            background: transparentize($secondary-color, 0.4);
-
-            .queue-button {
-                width: 42%;
-                height: 100%;
                 pointer-events: all;
-                padding: 3px 10px;
+                user-select: none;
 
-                overflow: hidden;
+                // half of the clear icon + margin, this adjusts the table to be flush with the text input
+                left: calc(-50% - #{$button-width} / 2 - #{$button-margin-right} / 2);
 
-                color: white;
-                background: transparentize($secondary-color, 0.45);
-                &:hover {
-                    background: transparentize($secondary-color, 0.2);
+                // Color customization (mostly table borders)
+                background: darken($background, 2%);
+                $border-color: lighten($secondary-color, 10);
+                border: 1px solid $border-color;
+
+                tr {
+                    border-left-color: $border-color;
+                    border-right-color: $border-color;
+
+                    td, th {
+                        position: relative;
+                        border-bottom: none;
+                    }
                 }
-                transition: background-color .2s ease-in-out,
-                            width .5s $ease-out-quint,
-                            border-color .3s $ease-out-quint;
 
-                border-color: white;
-                border-top: none;
-                border-bottom: none;
-                border-radius: 0;
-                border-width: 3px;
+                thead {
+                    border-bottom: 1px solid transparentize(lighten($dark-color, 10), 0.45);
 
-                .panel {
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
+                    tr {
+                        height: 35px;
 
-                    &:nth-of-type(2) {
-                        top: 100%;
+                        th {
+                            padding: 2px 15px 2px 15px;
+                        }
+                    }
+                }
+
+                tbody tr {
+                    position: relative;
+                    cursor: pointer;
+
+                    height: $row-height;
+                    @include media("<=phone") {
+                        height: $row-height-mobile
                     }
 
-                    transform: translateY(0);
-                    transition: .75s $ease-out-quint;
-
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-
-                    .progress {
-                        position: absolute;
-                        top: calc(50% - 12px);
-                        left: calc(50% - 12px);
-                        color: white;
+                    &:not(:last-of-type) {
+                        border-bottom: 1px solid transparentize(lighten($dark-color, 15), 0.8)
                     }
 
-                    .icon {
-                        margin-right: 8px;
+                    // table cell
+                    td {
+                        padding: 2px 10px 2px 3px;
                     }
+
+                    // thumbnail
+                    img {
+                        height: auto;
+                        width: 90px;
+                        max-height: 100px;
+
+                        margin-top: auto;
+                        margin-bottom: auto;
+
+                        @include media("<=phone") {
+                            width: 70px;
+                            max-height: 80px;
+                        }
+                    }
+
                 }
             }
 
-            // The loading spinner is hidden until loading starts
-            &.loading .queue-button .panel {
-                transform: translateY(-100%);
-            }
-            &.loaded {
-                @keyframes fadeOut {
-                    0% { opacity: 1 }
-                    100% { opacity: 0 }
+            // An overlay which is applied over every search result
+            .overlay {
+                $anim-duration: .7s;
+                $queue-button-width: 42%;
+                $queue-button-width-mobile: 80%;
+
+                display: flex;
+                visibility: hidden;
+                position: absolute;
+
+                opacity: 0;
+                pointer-events: all;
+
+                &.visible {
+                    visibility: visible;
+                    opacity: 1;
+                }
+                justify-content: center;
+                align-items: center;
+
+                height: $row-height;
+                @include media("<=phone") {
+                    height: $row-height-mobile
                 }
 
-                animation-name: fadeOut;
-                animation-duration: .3s;
-                animation-timing-function: $ease-out-quad;
-                animation-delay: .2s;
-                animation-fill-mode: forwards;
+                width: 100%;
+                left: 0;
+                cursor: pointer;
+
+                transition: .1s ease-in-out;
+                background: transparentize($secondary-color, 0.4);
 
                 .queue-button {
-                    width: 110%;
-                    border-color: transparent;
-                }
-            }
+                    width: $queue-button-width;
+                    @include media("<phone") {
+                        width: $queue-button-width-mobile;
+                    }
 
+                    height: 100%;
+                    pointer-events: all;
+                    padding: 3px 10px;
+
+                    overflow: hidden;
+
+                    color: white;
+                    background: transparentize($secondary-color, 0.45);
+                    &:hover {
+                        background: transparentize($secondary-color, 0.2);
+                    }
+                    transition: background-color .2s $ease-out-quart,
+                    width $anim-duration $ease-out-quint,
+                    border-width $anim-duration $ease-out-quart;
+
+                    border-color: white;
+                    border-top: none;
+                    border-bottom: none;
+                    border-radius: 0;
+                    border-width: 3px;
+
+                    .panel {
+                        width: 100%;
+                        height: 100%;
+                        position: absolute;
+
+                        top: 0;
+                        &:nth-of-type(2) {
+                            top: 100%;
+                        }
+
+                        transform: translateY(0);
+                        transition: transform $anim-duration $ease-out-quint;
+
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        .progress {
+                            position: absolute;
+                            top: calc(50% - 12px);
+                            left: calc(50% - 12px);
+                            color: white;
+                        }
+
+                        .icon {
+                            margin-right: 8px;
+                        }
+                    }
+                }
+
+                // The loading spinner is hidden until loading starts, appears from below
+                &.loading .queue-button .panel {
+                    transform: translateY(-100%);
+                }
+                // After a song finishes loading a soft fadeout with some width change is applied
+                &.loaded {
+                    @keyframes fadeOut {
+                        0% { opacity: 1 }
+                        100% { opacity: 0 }
+                    }
+                    @keyframes bounceWidth {
+                        0% {width: $queue-button-width}
+                        25% {width: calc(#{$queue-button-width} - 15px); border-width: 3px}
+                        100% {width: 110%; border-width: 0}
+                    }
+                    @keyframes bounceWidthMobile {
+                        0% {width: $queue-button-width-mobile}
+                        25% {width: calc(#{$queue-button-width-mobile} - 5px); border-width: 3px}
+                        100% {width: 110%; border-width: 0}
+                    }
+
+                    animation-name: fadeOut;
+                    animation-duration: $anim-duration - .25s;
+                    animation-timing-function: $ease-out-quad;
+                    animation-delay: .25s;
+                    animation-fill-mode: forwards;
+
+                    .queue-button {
+                        animation-name: bounceWidth;
+                        @include media("<=phone") {
+                            animation-name: bounceWidthMobile
+                        }
+
+                        animation-duration: $anim-duration;
+                        animation-timing-function: $ease-out-quart;
+                        animation-fill-mode: forwards;
+                    }
+                }
+
+            }
         }
+
+
     }
 
     &__button {
