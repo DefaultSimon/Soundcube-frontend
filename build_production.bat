@@ -3,7 +3,7 @@ REM React production builder
 REM ---------------
 
 REM Install dependencies if needed
-npm update
+npm install
 
 REM Delete current build
 rmdir /s /q build 2>nul

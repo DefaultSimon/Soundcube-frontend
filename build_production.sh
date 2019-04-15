@@ -5,7 +5,7 @@
 # ---------------
 
 # Install dependencies if needed
-npm update
+npm install
 
 # Remove previous build
 rm -rf build/*
